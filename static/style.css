@@ -1,0 +1,67 @@
+body {
+  font-family: "Helvetica Neue";
+  font-weight: 200;
+  margin: 20px 20px 20px 20px;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+h1 {
+  font-weight: 400;
+}
+
+fieldset {
+  border: none;
+}
+
+#file {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#file + label {
+    /*font-size: 1.25em;*/
+    /*font-weight: 200;*/
+    color: white;
+    background-color: black;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 20px 20px 20px 20px;
+    width: 150px;
+    height: 25px;
+}
+
+#file:focus + label,
+#file + label:hover {
+    opacity: 0.8;
+}
+
+#file + label {
+	cursor: pointer;
+}
+
+#file:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+
+#submit {
+  background-color: black;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 200;
+  font-family: "Helvetica Neue";
+}
+
+#submit:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}

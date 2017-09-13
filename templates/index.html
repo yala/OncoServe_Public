@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+
+    <script src="../static/script.js"></script>
+    <title>OncoServe</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+  </head>
+
+  <body>
+    <h1>Welcome to OncoServe</h1>
+    <form id="input" method="post" enctype="multipart/form-data">
+      <fieldset>
+        <input name="file" type="file" id="file"
+        data-multiple-caption="{count} files selected" multiple>
+        <label for="file">Select a file</label>
+      </fieldset>
+      <fieldset>
+        <select id="model">
+          <option value="alexnet" selected>Alex Net</option>
+          <option value="resnet18">Res Net 18</option>
+          <option value="resnet34">Res Net 34</option>
+          <option value="resnet50">Res Net 50</option>
+          <option value="resnet101">Res Net 101</option>
+          <option value="resnet152">Res Net 152</option>
+          <option value="squeezenet1_0">Squeeze Net 1.0</option>
+          <option value="squeezenet1_1">Squeeze Net 1.1</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <button id="submit" type="button">Upload</button>
+      </fieldset>
+    </form>
+    <p><span id='output'></span></p>
+    <img id="image" src=""/>
+  </body>
+</html>
