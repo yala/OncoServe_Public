@@ -1,13 +1,52 @@
 body {
   font-family: "Helvetica Neue";
   font-weight: 200;
-  margin: 20px 20px 20px 20px;
+  margin: 0;
   text-align: center;
   font-size: 1.5em;
+  background:white;
 }
 
 h1 {
   font-weight: 400;
+  display: inline;
+  /*position: absolute;*/
+  /*top: 50%;*/
+  /*bottom: 50%;*/
+  /*min-height: 80%;*/
+  /*line-height: 50px;*/
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.header img {
+  /*max-width:100%;*/
+  /*max-height:100%;*/
+  padding: 20px;
+  /*opacity: 0;*/
+  height: 50px;
+  width: 225px;
+}
+
+.header {
+  width: 100%;
+  height: 100px;
+  position: fixed;
+  top: 0;
+  font-size: 0.8em;
+  /*bottom: auto;*/
+  background: white;
+  transition: font-size 0.25s, height 0.25s;
+  /*border: solid black;*/
+  /*overflow: hidden;*/
+  /*vertical-align: middle;*/
+  /*padding: 10px 10px 10px 10px;*/
+  display: table;
+}
+
+.content {
+  height: 1000px;
+  margin-top: 125px;
 }
 
 fieldset {
@@ -44,10 +83,10 @@ fieldset {
 	cursor: pointer;
 }
 
-#file:focus + label {
+/*#file:focus + label {
 	outline: 1px dotted #000;
 	outline: -webkit-focus-ring-color auto 5px;
-}
+}*/
 
 #submit {
   background-color: black;
@@ -64,4 +103,12 @@ fieldset {
 #submit:hover {
   opacity: 0.8;
   cursor: pointer;
+}
+
+.images{
+  padding: 20px 20px 20px 20px;
+}
+
+.images img {
+  width: 25%;
 }

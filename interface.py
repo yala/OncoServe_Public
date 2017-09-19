@@ -1,4 +1,6 @@
 import os, shutil
+import sys
+import getopt
 from flask import Flask
 from flask import render_template, redirect, request, json, jsonify
 from learning import analyzer
@@ -26,11 +28,13 @@ def index():
 @app.route('/serving', methods=['POST'])
 def serving():
     try:
-        data = request.files['file']
-        filename = str(secure_filename(data.filename))
-        data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        data = request.files.getlist('file')
+        for img in data:
+            filename = str(secure_filename(img.filename))
+            img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         model = request.form.get('model')
-        response = analyzer(data, model)
+        aggregation = request.form.get('agg')
+        response = analyzer(data, model, aggregation)
         return jsonify(response)
     except Exception as e:
         return jsonify({"error": str(e)})

@@ -13,30 +13,47 @@
   </head>
 
   <body>
-    <h1>Welcome to OncoServe</h1>
-    <form id="input" method="post" enctype="multipart/form-data">
-      <fieldset>
-        <input name="file" type="file" id="file"
-        data-multiple-caption="{count} files selected" multiple>
-        <label for="file">Select a file</label>
-      </fieldset>
-      <fieldset>
-        <select id="model">
-          <option value="alexnet" selected>Alex Net</option>
-          <option value="resnet18">Res Net 18</option>
-          <option value="resnet34">Res Net 34</option>
-          <option value="resnet50">Res Net 50</option>
-          <option value="resnet101">Res Net 101</option>
-          <option value="resnet152">Res Net 152</option>
-          <option value="squeezenet1_0">Squeeze Net 1.0</option>
-          <option value="squeezenet1_1">Squeeze Net 1.1</option>
-        </select>
-      </fieldset>
-      <fieldset>
-        <button id="submit" type="button">Upload</button>
-      </fieldset>
-    </form>
-    <p><span id='output'></span></p>
-    <img id="image" src=""/>
+    <div class="header">
+      <img src="static/logos/mgh.png"/>
+      <h1>Welcome to OncoServe</h1>
+      <img src="static/logos/mit.png"/>
+    </div>
+    <div class="content">
+      <form id="input" method="post" enctype="multipart/form-data">
+        <fieldset>
+          <input name="file" type="file" id="file"
+          data-multiple-caption="{count} files selected" multiple="multiple">
+          <label for="file">Select a file</label>
+        </fieldset>
+        <fieldset>
+          <select id="model">
+            <option value="alexnet" selected>Alex Net</option>
+            <option value="resnet18">Res Net 18</option>
+            <option value="resnet34">Res Net 34</option>
+            <option value="resnet50">Res Net 50</option>
+            <option value="resnet101">Res Net 101</option>
+            <option value="resnet152">Res Net 152</option>
+            <option value="squeezenet1_0">Squeeze Net 1.0</option>
+            <option value="squeezenet1_1">Squeeze Net 1.1</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <select id="agg">
+            <option value="first" selected>First</option>
+            <option value="last">Last</option>
+            <option value="max">Most Common</option>
+            <option value="min">Least Common</option>
+            <option value="none">None</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <button id="submit" type="button">Upload</button>
+        </fieldset>
+      </form>
+      <p><span id='output'></span></p>
+      <img id="loading" src=""/>
+      <div class="images">
+      </div>
+    </div>
   </body>
 </html>

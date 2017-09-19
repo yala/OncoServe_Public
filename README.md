@@ -18,12 +18,12 @@ Make sure Master branch is clean by creating separate branches and cross-checkin
   - Select pre-trained models from dropdown
   - Return prediction/errors
   - Display uploaded image
+  - Loading gif when model is loading
+  - Add different options to aggregate results
+  - Options to upload multiple files
 - To do:
 	- Add some JS/CSS to make it prettier
-	- Options to upload entire folder / multiple files
   - Drag and drop upload
-  - Add different options to aggregate results
-  - Loading gif when model is loading
 
 ### Model
 - Eventually will load from OncoNet
@@ -39,9 +39,9 @@ Make sure Master branch is clean by creating separate branches and cross-checkin
 - Tests for individual components of the model
 - Using Python requests
 - Currently can:
-  - Send one image post request and output results in terminal
+  - Send multiple image post request with model and aggregation configurations and output results in terminal
 - To do
-  - Write a for loop for multiple images
+  - Upload a folder instead of individual images
   - Test automatically before git push
 
 ### Error Logging
