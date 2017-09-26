@@ -31,7 +31,6 @@ Make sure Master branch is clean by creating separate branches and cross-checkin
 - Currently can:
   - Load pre-trained models from torchvision
 - To do:
-  - Convert images from dicoms to png format (examples on cbis-ddsm)
   - Connect to OncoNet
 
 ### Unit Tests
@@ -49,8 +48,8 @@ Make sure Master branch is clean by creating separate branches and cross-checkin
 - Use Pylogger
 - Currently can:
   - Display errors in browser
-- To do:
   - Use logger to save in log file
+- To do:
 
 ### Environment and Portability
 - Wrap all the necessary libraries in a light VM for modular setup

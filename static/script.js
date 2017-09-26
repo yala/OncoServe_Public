@@ -37,8 +37,8 @@ $(document).ready(function() {
     $('.images').empty();
 
     var fd = new FormData($('#input')[0]);
-    fd.append('model', $('#model').val());
-    fd.append('agg', $('#agg').val());
+    // fd.append('model', $('#model').val());
+    // fd.append('agg', $('#agg').val());
 
     var dir = "static/uploads/";
     $.ajax({
@@ -66,7 +66,7 @@ $(document).ready(function() {
         }
       },
       error: function(response){
-      
+
       },
     });
   });

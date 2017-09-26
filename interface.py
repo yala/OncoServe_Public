@@ -10,10 +10,8 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-
+app.config.from_object('config')
 app.config.update(
-    DEBUG=True,
-    SERVER_NAME="localhost:5000",
     UPLOAD_FOLDER=os.path.join(APP_ROOT, 'static/uploads')
 )
 
@@ -57,9 +55,7 @@ def serving():
         for img in data:
             filename = str(secure_filename(img.filename))
             img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        model = request.form.get('model')
-        aggregation = request.form.get('agg')
-        response = analyzer(data, model, aggregation)
+        response = analyzer(data, app.config['MODEL'], app.config['AGGREGATION'])
         logger.info("Files successfully served!")
         return jsonify(response)
     except Exception as e:
