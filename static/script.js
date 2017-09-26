@@ -65,6 +65,9 @@ $(document).ready(function() {
           $("#output").text("Error: " + response.error);
         }
       },
+      error: function(response){
+      
+      },
     });
   });
 });
