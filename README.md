@@ -1,13 +1,17 @@
 # OncoServe
 
 ## Big Picture
-OncoNet trains model using Pytorch to classify binary pathology categories.
-OncoServe should wrap the model in a server that allows it to return outputs in real time.
+- OncoData preprocesses the images for training.
+- OncoNet trains model using Pytorch to classify binary pathology
+categories.
+- OncoServe should wrap the model in a server that allows it to return outputs in real time.
 
 ## Github
 https://github.com/clarali210/OncoServe
 
 Make sure Master branch is clean by creating separate branches and cross-checking merge requests. Test scripts should run before each push. This way we can have reliable version control to default back on.
+
+Make separate branch for v1.1 so it can be improved for production.
 
 ## Structure
 
@@ -31,7 +35,7 @@ Make sure Master branch is clean by creating separate branches and cross-checkin
 - Currently can:
   - Load pre-trained models from torchvision
 - To do:
-  - Connect to OncoNet
+  - Connect to OncoNet and OncoData
 
 ### Unit Tests
 - A script that can test the client by inputting images from ImgNet and returning an output
@@ -41,7 +45,7 @@ Make sure Master branch is clean by creating separate branches and cross-checkin
   - Send multiple image post request with model and aggregation configurations and output results in terminal
 - To do
   - Upload a folder instead of individual images
-  - Test automatically before git push
+  - Test automatically before git push using unittests
 
 ### Error Logging
 - When an error occurs, log the error in a file
@@ -56,5 +60,19 @@ Make sure Master branch is clean by creating separate branches and cross-checkin
 - Use Docker or Singularity
 	- https://docs.docker.com/get-started/
   - http://singularity.lbl.gov/
+- Currently can:
+  - Use Docker for modularity
+    - List local images: ```docker images```
+    - Remove specified image: ```docker image rm <image id>```
+    - List running containers: ```docker container ls``` (```-a``` to list all containers)
+    - Stop specified container: ```docker container stop <hash>```
+    - Load image and run: ```docker run -p 5000:5000 clarali210/oncoserve```
+    - Create image with Dockerfile: ```docker build -t oncoserve .```
+    - Commit docker image:
+      - ```docker login```
+      - ```docker tag oncoserve clarali210/oncoserve:tag```
+      - ```docker push clarali210/oncoserve:tag```
+
+
  
  

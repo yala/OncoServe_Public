@@ -1,5 +1,5 @@
 DEBUG=True
-SERVER_NAME="localhost:5000"
+# SERVER_NAME="localhost:5000"
 
 # Custom configuration parameters
 MODEL="alexnet"         # model to use for the task: "alexnet", "resnet18",
