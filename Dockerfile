@@ -22,4 +22,4 @@ EXPOSE 80
 ENV NAME World
 
 # Run app.py when the container launches
-CMD ["python", "/OncoServe/interface.py"]
+CMD ["python", "/OncoServe/scripts/app.py"]

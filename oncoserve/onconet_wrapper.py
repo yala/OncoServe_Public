@@ -6,10 +6,17 @@ import  OncoNet.onconet.transformers.transformer_factory as transformer_factory
 import aggregators.factory as aggregator_factory
 logger = logging.getLogger('oncologger.onconet')
 
+INIT_MESSAGE = "Initializing OncoNet Wrapper..."
+TRANSF_MESSAGE = "Transfomers succesfully composed"
+MODEL_MESSAGE = "Model successfully loaded from : {}"
+AGGREGATOR_MESSAGE = "Aggregator [{}] succesfully loaded"
+IMG_CLASSIF_MESSAGE = "Image classification complete!"
+EXAM_CLASSIF_MESSAGE = "Exam classification complete!"
+
 
 class OncoNetWrapper(object):
     def __init__(self, args):
-        logger.info("Initializing OncoNet Wrapper...")
+        logger.info(INIT_MESSAGE)
         self.args = args
         args.cuda = args.cuda and torch.cuda.is_available()
         args.test_image_transformers = parsing.parse_transformers(args.test_image_transformers)
@@ -19,12 +26,11 @@ class OncoNetWrapper(object):
 
 
         self.transformer = ComposeTrans(test_transformers)
-        logger.info("Transfomers succesfully composed")
+        logger.info(TRANSF_MESSAGE)
         self.model = torch.load(args.snapshot)
-        logger.info("Model successfully loaded from : {}".format(args.snapshot))
-        self.aggregator = aggregator_factory(args)
-        logger.info("Aggregator [{}] succesfully loaded".format(args.aggregator))
-
+        logger.info(MODEL_MESSAGE.format(args.snapshot))
+        self.aggregator = aggregator_factory.get_exam_aggregator(args.aggregator)
+        logger.info(AGGREGATOR_MESSAGE.format(args.aggregator))
 
 
     def process_image(self, image):
@@ -35,7 +41,7 @@ class OncoNetWrapper(object):
         pred_y = self.model(x)
         #Find max pred
         pred_y = self.args.label_map[ pred_y.data.numpy().argmax() ]
-        logger.info("Image classification complete!")
+        logger.info(IMG_CLASSIF_MESSAGE)
         return pred_y
 
     def process_exam(self, images):
@@ -43,5 +49,5 @@ class OncoNetWrapper(object):
         for im in images:
             preds.append(self.process_image(im))
         y = self.aggregator(preds)
-        logger.info("Exam classification complete!")
+        logger.info(EXAM_CLASSIF_MESSAGE)
         return y
