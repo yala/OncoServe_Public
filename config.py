@@ -1,9 +1,32 @@
-DEBUG=True
-# SERVER_NAME="localhost:5000"
+class Args(object):
+    def __init__(self, config_dict):
+        self.__dict__.update(config_dict)
 
-# Custom configuration parameters
-MODEL="alexnet"         # model to use for the task: "alexnet", "resnet18",
-                        # "resnet34", "resnet50", "resnet101", "resnet152",
-                        # "squeezenet1.0", "squeezenet1.1"
-AGGREGATION="none"          # method of aggregating the results: "first", "last",
-                            # "min", "max", "none"
+class Config(object):
+    DEBUG=True
+    AGGREGATION="none"
+    ONCONET_CONFIG = {}
+    ONCODATA_CONFIG = {
+        'converter': 'dcmtk'
+    }
+
+class DensityConfig(Config):
+    AGGREGATION="vote"
+    ONCONET_CONFIG = {
+        'cuda': False,
+        'dropout': .1,
+        'img_mean': 0.116562376848,
+        'img_std': 0.192259717494,
+        'img_size': [256,256],
+        'num_chan': 3,
+        'num_gpus': 1,
+        'cuda': True,
+        'model_name': 'resnet18',
+        'test_image_transformers': ['scale_2d'],
+        'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
+        'additional': None,
+        'snapshot': '/Mounts/Isilon/best_4way.pt',
+        'label_map': [1, 2, 3, 4]
+    }
+    ONCONET_ARGS = Args(ONCONET_CONFIG)
+
