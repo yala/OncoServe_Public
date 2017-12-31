@@ -4,15 +4,12 @@ import oncoserve.logger
 from oncodata.dicom_to_png.dicom_to_png import dicom_to_png_dcmtk, dicom_to_png_imagemagick
 from PIL import Image
 
-logger = oncoserve.logger.get_logger('oncologger.oncodata', 'errors.log')
 
+NO_CONVERTOR_MSG = 'OncoData- Converter choice {} not recognized!'
+FAIL_CONVERT_MESSAGE = 'OncoData- Fail to convert dicom {}. Caused Exception {} with args: {}'
+SUCCESS_CONV_MESSAGE = 'OncoData- Succesffuly converted dicom {} into png with args: {}'
 
-
-NO_CONVERTOR_MSG = 'Converter choice {} not recognized!'
-FAIL_CONVERT_MESSAGE = 'Fail to convert dicom {}. Caused Exception {} with args: {}'
-SUCCESS_CONV_MESSAGE = 'Succesffuly converted dicom {} into png with args: {}'
-
-def get_converter(args):
+def get_converter(args, logger):
     convertor = args.convertor
 
     if convertor == 'dcmtk':
@@ -29,7 +26,7 @@ def remove_if_exist(path):
     if os.path.exists(path):
             os.remove(path)
 
-def get_pngs(dicoms, args):
+def get_pngs(dicoms, args, logger):
     '''
         Converts dicoms into PIL images through use of OncoData.
         This function makes and deletes temporary files to interface with OncoData depdencies.

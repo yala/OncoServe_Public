@@ -28,7 +28,7 @@ logger = oncoserve.logger.get_logger('oncologger', 'errors.log')
 onconet_args = app.config['ONCONET_ARGS']
 oncodata_args = app.config['ONCODATA_ARGS']
 # Init onconet wrapper
-onconet = onconet_wrapper.OncoNetWrapper(onconet_args, app.config['AGGREGATION'])
+onconet = onconet_wrapper.OncoNetWrapper(onconet_args, app.config['AGGREGATION'], logger)
 
 
 @app.route('/serve', methods=['POST'])
@@ -47,7 +47,7 @@ def serve():
     try:
         dicoms = request.files.getlist('dicom')
         additional = request.form
-        images = oncodata_wrapper.get_pngs(dicoms, oncodata_args)
+        images = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
         logger.info(ONCODATA_SUCCESS_MSG)
         y = onconet.process_exam(images)
         logger.info(ONCONET_SUCCESS_MSG)
