@@ -56,11 +56,11 @@ def get_pngs(dicoms, args, logger):
             images.append(Image.open(png_path))
             os.remove(dicom_path)
             os.remove(png_path)
-            logger.info(SUCCESS_CONV_MESSAGE.format(key, args))
+            logger.info(SUCCESS_CONV_MESSAGE.format(key, args.convertor))
         except Exception, e:
-            err_msg = FAIL_CONVERT_MESSAGE.format(key, e, args)
+            err_msg = FAIL_CONVERT_MESSAGE.format(key, e, args.convertor)
             logger.error(err_msg)
-            raise Exception(e)
+            raise Exception(err_msg)
 
     return images
 

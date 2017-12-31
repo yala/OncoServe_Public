@@ -2,6 +2,7 @@ import urllib2
 import json
 import requests
 import unittest
+import pdb
 
 class Test_MIT_App(unittest.TestCase):
 
@@ -45,9 +46,10 @@ class Test_MIT_App(unittest.TestCase):
         '''
         print(r.__dict__)
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r._content['prediction'], 3)
-        self.assertEqual(r._content['metadata']['mrn'], self.MRN)
-        self.assertEqual(r._content['metadata']['accession'], self.ACCESSION)
+        content = json.loads(r.content)
+        self.assertEqual(content['prediction'], 3)
+        self.assertEqual(content['metadata']['mrn'], self.MRN)
+        self.assertEqual(content['metadata']['accession'], self.ACCESSION)
 
     def test_bad_dicom_request(self):
 
@@ -67,9 +69,10 @@ class Test_MIT_App(unittest.TestCase):
         '''
         print(r.__dict__)
         self.assertEqual(r.status_code, 500)
-        self.assertEqual(r._content['prediction'], None)
-        self.assertEqual(r._content['metadata']['mrn'], self.MRN)
-        self.assertEqual(r._content['metadata']['accession'], self.ACCESSION)
+        content = json.loads(r.content)
+        self.assertEqual(content['prediction'], None)
+        self.assertEqual(content['metadata']['mrn'], self.MRN)
+        self.assertEqual(content['metadata']['accession'], self.ACCESSION)
 
 if __name__ == '__main__':
     unittest.main()

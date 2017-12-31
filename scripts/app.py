@@ -53,7 +53,6 @@ def serve():
     '''
     logger.info("Serving request...")
     response = {
-                'metadata': additional,
                 'model_name': app.config['NAME'],
                 'oncoserve_version': app.config['ONCOSERVE_VERSION'],
                 'onconet_version': app.config['ONCONET_VERSION'],
@@ -62,7 +61,8 @@ def serve():
                 }
     try:
         dicoms = request.files.getlist('dicom')
-        additional = request.form
+        metadata = request.form
+        response['metadata'] = metadata
         images = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
         logger.info(ONCODATA_SUCCESS_MSG)
         y = onconet.process_exam(images)
@@ -70,6 +70,7 @@ def serve():
         msg = 'OK'
         response['prediction'] = y
         response['msg'] = msg
+
         return jsonify(response), HTTP_200_OK
 
     except Exception as e:
