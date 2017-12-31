@@ -20,17 +20,13 @@ ONCOSERVE_FAIL_MSG = 'Error. Could not serve request. Exception: {}'
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-app.config.from_object('config')
-app.config.update(
-    UPLOAD_FOLDER=os.path.join(APP_ROOT, 'static/uploads')
-)
+app.config.from_object('config.DensityConfig')
 
 # create logger
 logger = oncoserve.logger.get_logger('oncologger', 'errors.log')
 
-##TODO Get config
-onconet_args = {}
-oncodata_args = {}
+onconet_args = app.config['ONCONET_ARGS']
+oncodata_args = app.config['ONCODATA_ARGS']
 # Init onconet wrapper
 onconet = onconet_wrapper.OncoNetWrapper(onconet_args)
 
