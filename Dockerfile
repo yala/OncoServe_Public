@@ -8,10 +8,11 @@ WORKDIR /OncoServe
 ADD . /OncoServe
 
 # Install any needed packages specified in requirements.txt
+RUN apt-get update
+RUN apt-get --yes --force-yes install dcmtk
 RUN pip install -r requirements.txt
 RUN pip install -r OncoNet/requirements.txt
 RUN pip install -r OncoData/requirements.txt
-RUN sudo apt-get install dcmtk
 
 
 # Make port 5000 available to the world outside this container
