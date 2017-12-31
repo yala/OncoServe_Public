@@ -1,5 +1,3 @@
-import os
-
 class Args(object):
     def __init__(self, config_dict):
         self.__dict__.update(config_dict)
@@ -9,11 +7,12 @@ class Config(object):
     AGGREGATION="none"
     ONCONET_CONFIG = {}
     ONCODATA_CONFIG = {
-        'convertor': 'dcmtk',
-        'temp_img_dir': os.environ['TMP_IMG_DIR']
+        'converter': 'dcmtk',
+        'temp_img_dir': 'tmp_images'
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCODATA_ARGS = Args(ONCODATA_CONFIG)
+    LOGFILE = 'LOGS'
     ONCOSERVE_VERSION = '0.1.0'
     ONCODATA_VERSION = '0.1.0'
     ONCONET_VERSION =  '0.0.9'
@@ -27,16 +26,17 @@ class DensityConfig(Config):
     ONCONET_CONFIG = {
         'cuda': False,
         'dropout': .1,
-        'img_mean': 0.116562376848,
-        'img_std': 0.192259717494,
+        'img_mean': 7662.53827604,
+        'img_std': 12604.0682836,
         'img_size': [256,256],
         'num_chan': 3,
         'num_gpus': 1,
+        'cuda': True,
         'model_name': 'resnet18',
         'test_image_transformers': ['scale_2d'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        'snapshot': 'snapshots/best_4way.pt',
+        'snapshot': '/Mounts/Isilon/best_4way.pt',
         'label_map': [1, 2, 3, 4],
         'make_fc': False
     }
