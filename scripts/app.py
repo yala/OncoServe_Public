@@ -7,14 +7,15 @@ sys.path.append(os.path.join(dirname(dirname(realpath(__file__))), 'OncoData'))
 import sys
 import oncoserve.logger
 from flask import Flask
-from flask import request, json, jsonify, status
+from flask import request, json, jsonify
 import oncoserve.onconet_wrapper as onconet_wrapper
 import oncoserve.oncodata_wrapper as oncodata_wrapper
 
 ONCODATA_SUCCESS_MSG = 'Successfully converted dicoms into pngs through OncoData'
 ONCONET_SUCCESS_MSG = 'Succesfully got prediction from OncoNet for exam'
 ONCOSERVE_FAIL_MSG = 'Error. Could not serve request. Exception: {}'
-
+HTTP_200_OK = 200
+HTTP_500_INTERNAL_SERVER_ERROR = 500
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -69,13 +70,13 @@ def serve():
         msg = 'OK'
         response['prediction'] = y
         response['msg'] = msg
-        return jsonify(response), status.HTTP_200_OK
+        return jsonify(response), HTTP_200_OK
 
     except Exception as e:
         msg = ONCOSERVE_FAIL_MSG.format(str(e))
         response['prediction'] = None
         response['msg'] = msg
-        return jsonify(response), status.HTTP_500_INTERNAL_SERVER_ERROR
+        return jsonify(response), HTTP_500_INTERNAL_SERVER_ERROR
 
 if __name__ == '__main__':
     port = app.config['PORT']
