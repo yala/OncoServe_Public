@@ -7,11 +7,12 @@ class Config(object):
     AGGREGATION="none"
     ONCONET_CONFIG = {}
     ONCODATA_CONFIG = {
-        'convertor': 'dcmtk',
+        'converter': 'dcmtk',
         'temp_img_dir': 'tmp_images'
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCODATA_ARGS = Args(ONCODATA_CONFIG)
+    LOGFILE = 'LOGS'
 
 
 class DensityConfig(Config):
@@ -29,9 +30,8 @@ class DensityConfig(Config):
         'test_image_transformers': ['scale_2d'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        'snapshot': 'snapshots/best_4way.pt',
+        'snapshot': '/Mounts/Isilon/best_4way.pt',
         'label_map': [1, 2, 3, 4]
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
-    VERSION = '0.1.0'
 

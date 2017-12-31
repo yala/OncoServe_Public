@@ -23,7 +23,7 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app.config.from_object('config.DensityConfig')
 
 # create logger
-logger = oncoserve.logger.get_logger('oncologger', 'errors.log')
+logger = oncoserve.logger.get_logger('oncologger', app.config['LOGFILE'])
 
 onconet_args = app.config['ONCONET_ARGS']
 oncodata_args = app.config['ONCODATA_ARGS']
