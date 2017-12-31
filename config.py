@@ -7,8 +7,12 @@ class Config(object):
     AGGREGATION="none"
     ONCONET_CONFIG = {}
     ONCODATA_CONFIG = {
-        'converter': 'dcmtk'
+        'converter': 'dcmtk',
+        'temp_img_dir': 'tmp_images'
     }
+    ONCONET_ARGS = Args(ONCONET_CONFIG)
+    ONCODATA_ARGS = Args(ONCODATA_CONFIG)
+
 
 class DensityConfig(Config):
     AGGREGATION="vote"

@@ -1,11 +1,16 @@
 import os, shutil
 import sys
 import getopt
-import logging
+import oncoserve.logger
 from flask import Flask
 from flask import render_template, redirect, request, json, jsonify
-from learning import analyzer
+import oncoserve.onconet_wrapper as onconet_wrapper
+import oncoserve.oncodata_wrapper as oncodata_wrapper
 from werkzeug.utils import secure_filename
+
+ONCODATA_SUCCESS_MSG = 'Successfully converted dicoms into pngs through OncoData'
+ONCONET_SUCCESS_MSG = 'Succesfully got prediction from OncoNet for exam'
+ONCOSERVE_FAIL_MSG = 'Error. Could not serve request. Exception: {}'
 
 app = Flask(__name__)
 
@@ -16,51 +21,44 @@ app.config.update(
 )
 
 # create logger
-logger = logging.getLogger('oncologger')
-logger.setLevel(logging.DEBUG)
-# create file handler which logs even debug messages
-fh = logging.FileHandler('errors.log')
-fh.setLevel(logging.DEBUG)
-# create console handler with a higher log level
-ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR)
-# create formatter and add it to the handlers
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-ch.setFormatter(formatter)
-# add the handlers to the logger
-logger.addHandler(fh)
-logger.addHandler(ch)
+logger = oncoserve.logger.get_logger('oncologger', 'errors.log')
+
+##TODO Get config
+onconet_args = {}
+oncodata_args = {}
+# Init onconet wrapper
+onconet = onconet_wrapper.OncoNetWrapper(onconet_args)
 
 
-@app.route('/')
-def index():
-    logger.info("Deleting previously uploaded files...")
-    try:
-        # Deletes previously uploaded files on refresh
-        for files in os.listdir(app.config['UPLOAD_FOLDER']):
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], files)
-            if os.path.isfile(filepath):
-                os.unlink(filepath)
-        logger.info("Files successfully deleted!")
-    except Exception as e:
-        logger.error(str(e))
-    return render_template('index.html')
+@app.route('/serve', methods=['POST'])
+def serve():
+    '''
+        API to serve a model from OncoNet
+        Takes a list of dicom files, and a list of optional keys
+        i.e { dicoms: [bytes, bytes, bytes], additional: {} }
+        and returns:
+            { prediction: Y, additional: {}}
 
-@app.route('/serving', methods=['POST'])
-def serving():
+        Additional is meant to contain things like MRN, ACCESSION and any
+        additional metadata for object tracking. The configuration of the model used to produce Y is set in the app configuration.
+    '''
     logger.info("Serving request...")
     try:
-        data = request.files.getlist('file')
-        for img in data:
-            filename = str(secure_filename(img.filename))
-            img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        response = analyzer(data, app.config['MODEL'], app.config['AGGREGATION'])
-        logger.info("Files successfully served!")
+        dicoms = request.dicoms
+        additional = request.additional
+        images = oncodata_wrapper.get_pngs(dicoms, oncodata_args)
+        logger.info(ONCODATA_SUCCESS_MSG)
+        y = onconet.process_exam(images)
+        logger.info(ONCONET_SUCCESS_MSG)
+        msg = 'OK'
+        response = {'prediction': y, 'additional': additional, 'msg':msg}
         return jsonify(response)
+
     except Exception as e:
-        logger.error(str(e))
-        return jsonify({"error": str(e)})
+        msg = ONCOSERVE_FAIL_MSG.format(str(e))
+        response = {'prediction': None, 'additional': additional, 'msg':msg}
+        logger.error(msg)
+        return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

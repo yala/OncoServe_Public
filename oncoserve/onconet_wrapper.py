@@ -1,10 +1,12 @@
 import logging
 import torch
+import oncoserve.logger
 import OncoNet.onconet.utils.parsing as parsing
 from  OncoNet.onconet.transformers.basic import ComposeTrans
 import  OncoNet.onconet.transformers.transformer_factory as transformer_factory
 import aggregators.factory as aggregator_factory
-logger = logging.getLogger('oncologger.onconet')
+
+logger = oncoserve.logger.get_logger('oncologger.onconet', 'errors.log')
 
 INIT_MESSAGE = "Initializing OncoNet Wrapper..."
 TRANSF_MESSAGE = "Transfomers succesfully composed"
