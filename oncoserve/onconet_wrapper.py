@@ -1,10 +1,10 @@
 import logging
 import torch
 import oncoserve.logger
-import OncoNet.onconet.utils.parsing as parsing
-from  OncoNet.onconet.transformers.basic import ComposeTrans
-import  OncoNet.onconet.transformers.transformer_factory as transformer_factory
-import aggregators.factory as aggregator_factory
+import onconet.utils.parsing as parsing
+from  onconet.transformers.basic import ComposeTrans
+import  onconet.transformers.factory as transformer_factory
+import oncoserve.aggregators.factory as aggregator_factory
 
 logger = oncoserve.logger.get_logger('oncologger.onconet', 'errors.log')
 

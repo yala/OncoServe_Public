@@ -1,7 +1,7 @@
 import os
 import uuid
 import oncoserve.logger
-from OncoData.oncodata.dicom_to_png.dicom_to_png import dicom_to_png_dcmtk, dicom_to_png_imagemagick, dicom_to_png_matlab
+from oncodata.dicom_to_png.dicom_to_png import dicom_to_png_dcmtk, dicom_to_png_imagemagick
 from PIL import Image
 
 logger = oncoserve.logger.get_logger('oncologger.oncodata', 'errors.log')
@@ -19,8 +19,6 @@ def get_converter(args):
         return dicom_to_png_dcmtk
     elif convertor == 'imagemagick':
         return dicom_to_png_imagemagick
-    elif convertor == 'matlab':
-        dicom_to_png_matlab
     else:
         err_msg = NO_CONVERTOR_MSG.format(convertor)
         logger.error(err_msg)

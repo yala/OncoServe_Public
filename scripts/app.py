@@ -1,4 +1,9 @@
 import os, shutil
+from os.path import dirname, realpath
+import sys
+sys.path.append(dirname(dirname(realpath(__file__))))
+sys.path.append(os.path.join(dirname(dirname(realpath(__file__))),'OncoNet'))
+sys.path.append(os.path.join(dirname(dirname(realpath(__file__))), 'OncoData'))
 import sys
 import getopt
 import oncoserve.logger

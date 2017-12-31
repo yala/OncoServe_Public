@@ -1,4 +1,4 @@
-from oncoserve.aggregator.factory import RegisterExamAggregator
+from oncoserve.aggregators.factory import RegisterExamAggregator
 import numpy as np
 
 @RegisterExamAggregator("max")
