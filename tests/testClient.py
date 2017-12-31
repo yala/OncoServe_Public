@@ -10,15 +10,17 @@ class Test_MIT_App(unittest.TestCase):
         self.f2 = open("sample_dicoms/2.dcm", 'rb')
         self.f3 = open("sample_dicoms/3.dcm", 'rb')
         self.f4 = open("sample_dicoms/4.dcm", 'rb')
+        self.bad_f = open("sample_dicoms/bad.txt", 'rb')
         self.MRN = '2553222'
         self.ACCESSION = '12117409'
-        self.METADATA = {'mrn':MRN, 'accession': ACCESSION}
+        self.METADATA = {'mrn':self.MRN, 'accession': self.ACCESSION}
 
     def tearDown(self):
         self.f1.close()
         self.f2.close()
         self.f3.close()
         self.f4.close()
+        self.bad_f.close()
 
     def test_normal_request(self):
 
@@ -53,7 +55,7 @@ class Test_MIT_App(unittest.TestCase):
         '''
             1. Get faulty dicoms
         '''
-        dicoms = [('dicom',self.f1), ('dicom', None), ('dicom', self.f3), ('dicom', self.f4)]
+        dicoms = [('dicom',self.f1), ('dicom', self.bad_f), ('dicom', self.f3), ('dicom', self.f4)]
         '''
             2. Send request to model at /serve with dicoms in files field, and any metadata in the data field
         '''
