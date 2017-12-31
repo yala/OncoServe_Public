@@ -44,24 +44,24 @@ def get_pngs(dicoms, args):
     '''
     convertor = get_converter(args)
     images = []
-    for indx, dicom in enumerate(dicoms):
-        dicom_path = os.path.join(args.temp_img_dir, uuid.uuid4())
-        png_path = os.path.join(args.temp_img_dir, uuid.uuid4())
+    for key, dicom in enumerate(dicoms):
+        dicom_path = os.path.join(args.temp_img_dir, str(uuid.uuid4()))
+        png_path = os.path.join(args.temp_img_dir, str(uuid.uuid4()))
 
         remove_if_exist(dicom_path)
         remove_if_exist(png_path)
 
-        f = open(dicom_path, 'wb')
-        f.write(dicom)
+        dicom.save(dicom_path)
 
         convertor(dicom_path, png_path, skip_existing=False)
 
         try:
             images.append(Image.open(png_path))
+            os.remove(dicom_path)
             os.remove(png_path)
-            logger.info(SUCCESS_CONV_MESSAGE.format(indx, args))
+            logger.info(SUCCESS_CONV_MESSAGE.format(key, args))
         except Exception, e:
-            err_msg = FAIL_CONVERT_MESSAGE.format(indx, e, args)
+            err_msg = FAIL_CONVERT_MESSAGE.format(key, e, args)
             logger.error(err_msg)
             raise Exception(e)
 

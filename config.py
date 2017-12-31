@@ -7,7 +7,7 @@ class Config(object):
     AGGREGATION="none"
     ONCONET_CONFIG = {}
     ONCODATA_CONFIG = {
-        'converter': 'dcmtk',
+        'convertor': 'dcmtk',
         'temp_img_dir': 'tmp_images'
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)

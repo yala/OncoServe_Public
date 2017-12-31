@@ -11,7 +11,7 @@ from flask import Flask
 from flask import render_template, redirect, request, json, jsonify
 import oncoserve.onconet_wrapper as onconet_wrapper
 import oncoserve.oncodata_wrapper as oncodata_wrapper
-from werkzeug.utils import secure_filename
+import pdb
 
 ONCODATA_SUCCESS_MSG = 'Successfully converted dicoms into pngs through OncoData'
 ONCONET_SUCCESS_MSG = 'Succesfully got prediction from OncoNet for exam'
@@ -28,7 +28,7 @@ logger = oncoserve.logger.get_logger('oncologger', 'errors.log')
 onconet_args = app.config['ONCONET_ARGS']
 oncodata_args = app.config['ONCODATA_ARGS']
 # Init onconet wrapper
-onconet = onconet_wrapper.OncoNetWrapper(onconet_args)
+onconet = onconet_wrapper.OncoNetWrapper(onconet_args, app.config['AGGREGATION'])
 
 
 @app.route('/serve', methods=['POST'])
@@ -45,8 +45,8 @@ def serve():
     '''
     logger.info("Serving request...")
     try:
-        dicoms = request.dicoms
-        additional = request.additional
+        dicoms = request.files.getlist('dicom')
+        additional = request.form
         images = oncodata_wrapper.get_pngs(dicoms, oncodata_args)
         logger.info(ONCODATA_SUCCESS_MSG)
         y = onconet.process_exam(images)
@@ -62,4 +62,6 @@ def serve():
         return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = 5000
+    logger.info("Launching app at port {}".format(port))
+    app.run(host='0.0.0.0', port=port)

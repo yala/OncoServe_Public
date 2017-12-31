@@ -21,8 +21,8 @@ f2 = open("sample_dicoms/2.dcm", 'rb')
 f3 = open("sample_dicoms/3.dcm", 'rb')
 f4 = open("sample_dicoms/4.dcm", 'rb')
 
-dicoms = [f1, f2, f3, f4]
+dicoms = [('dicom',f1), ('dicom',f2), ('dicom',f3), ('dicom',f4)]
 
-r = requests.post("http://localhost:5000/serving", dicoms=dicoms, additional=METADATA)
+r = requests.post("http://localhost:5000/serve", files=dicoms, data=METADATA)
 
 print(r.__dict__)
