@@ -39,7 +39,7 @@ def get_pngs(dicoms, args, logger):
         - images: list of PIL image objects
 
     '''
-    convertor = get_converter(args)
+    convertor = get_converter(args, logger)
     images = []
     for key, dicom in enumerate(dicoms):
         dicom_path = os.path.join(args.temp_img_dir, str(uuid.uuid4()))

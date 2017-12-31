@@ -45,7 +45,6 @@ class OncoNetWrapper(object):
             x = x.cuda()
         pred_y = self.model(x)
         #Find max pred
-        pdb.set_trace()
         pred_y = self.args.label_map[ pred_y.cpu().data.numpy().argmax() ]
         self.logger.info(IMG_CLASSIF_MESSAGE.format(pred_y))
         return pred_y
