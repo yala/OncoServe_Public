@@ -51,7 +51,7 @@ class OncoNetWrapper(object):
         logger.info("get pred")
         #Find max pred
         pdb.set_trace()
-        pred_y = self.args.label_map[ pred_y.data.numpy().argmax() ]
+        pred_y = self.args.label_map[ pred_y.cpu().data.numpy().argmax() ]
         logger.info(IMG_CLASSIF_MESSAGE.format(pred_y))
         return pred_y
 
