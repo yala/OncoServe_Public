@@ -5,13 +5,11 @@ sys.path.append(dirname(dirname(realpath(__file__))))
 sys.path.append(os.path.join(dirname(dirname(realpath(__file__))),'OncoNet'))
 sys.path.append(os.path.join(dirname(dirname(realpath(__file__))), 'OncoData'))
 import sys
-import getopt
 import oncoserve.logger
 from flask import Flask
-from flask import render_template, redirect, request, json, jsonify
+from flask import request, json, jsonify, status
 import oncoserve.onconet_wrapper as onconet_wrapper
 import oncoserve.oncodata_wrapper as oncodata_wrapper
-import pdb
 
 ONCODATA_SUCCESS_MSG = 'Successfully converted dicoms into pngs through OncoData'
 ONCONET_SUCCESS_MSG = 'Succesfully got prediction from OncoNet for exam'
@@ -44,6 +42,14 @@ def serve():
         additional metadata for object tracking. The configuration of the model used to produce Y is set in the app configuration.
     '''
     logger.info("Serving request...")
+    response = {
+                'additional': additional,
+                'model_name': app.config['NAME'],
+                'oncoserve_version': app.config['ONCOSERVE_VERSION'],
+                'onconet_version': app.config['ONCONET_VERSION'],
+                'oncodata_version': app.config['ONCODATA_VERSION'],
+                'log_file': app.config['LOGFILE']
+                }
     try:
         dicoms = request.files.getlist('dicom')
         additional = request.form
@@ -52,16 +58,17 @@ def serve():
         y = onconet.process_exam(images)
         logger.info(ONCONET_SUCCESS_MSG)
         msg = 'OK'
-        response = {'prediction': y, 'additional': additional, 'msg':msg}
-        return jsonify(response)
+        response['prediction'] = y
+        response['msg'] = msg
+        return jsonify(response), status.HTTP_200_OK
 
     except Exception as e:
         msg = ONCOSERVE_FAIL_MSG.format(str(e))
-        response = {'prediction': None, 'additional': additional, 'msg':msg}
-        logger.error(msg)
-        return jsonify(response)
+        response['prediction'] = None
+        response['msg'] = msg
+        return jsonify(response), status.HTTP_500_INTERNAL_SERVER_ERROR
 
 if __name__ == '__main__':
-    port = 5000
+    port = app.config['PORT']
     logger.info("Launching app at port {}".format(port))
     app.run(host='0.0.0.0', port=port)

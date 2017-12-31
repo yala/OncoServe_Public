@@ -7,15 +7,21 @@ class Config(object):
     AGGREGATION="none"
     ONCONET_CONFIG = {}
     ONCODATA_CONFIG = {
-        'convertor': 'dcmtk',
+        'converter': 'dcmtk',
         'temp_img_dir': 'tmp_images'
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCODATA_ARGS = Args(ONCODATA_CONFIG)
     LOGFILE = 'LOGS'
+    ONCOSERVE_VERSION = '0.1.0'
+    ONCODATA_VERSION = '0.1.0'
+    ONCONET_VERSION =  '0.0.9'
+    NAME = 'BaseConfig'
+    PORT = 5000
 
 
 class DensityConfig(Config):
+    NAME = '2D_Mammo_Breast_Density'
     AGGREGATION="vote"
     ONCONET_CONFIG = {
         'cuda': False,
@@ -30,8 +36,9 @@ class DensityConfig(Config):
         'test_image_transformers': ['scale_2d'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        'snapshot': 'snapshots/best_4way.pt',
-        'label_map': [1, 2, 3, 4]
+        'snapshot': '/Mounts/Isilon/best_4way.pt',
+        'label_map': [1, 2, 3, 4],
+        'make_fc': False
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
 
