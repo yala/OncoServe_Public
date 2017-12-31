@@ -20,7 +20,7 @@ EXPOSE 5000
 EXPOSE 80
 
 # Define environment variable
-ENV NAME World
+ENV NAME OncoServe
 
 # Run app.py when the container launches
-CMD ["python", "/OncoServe/scripts/app.py"]
+CMD python /OncoServe/scripts/app.py

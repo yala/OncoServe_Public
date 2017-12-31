@@ -19,10 +19,11 @@ HTTP_500_INTERNAL_SERVER_ERROR = 500
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-app.config.from_object('config.DensityConfig')
-
+LOG_FILE = os.environ['LOGFILE']
+CONFIG_NAME = os.environ['CONFIG_NAME']
+app.config.from_object(CONFIG_NAME)
 # create logger
-logger = oncoserve.logger.get_logger('oncologger', app.config['LOGFILE'])
+logger = oncoserve.logger.get_logger('oncologger', LOG_FILE)
 
 onconet_args = app.config['ONCONET_ARGS']
 oncodata_args = app.config['ONCODATA_ARGS']
@@ -57,7 +58,7 @@ def serve():
                 'oncoserve_version': app.config['ONCOSERVE_VERSION'],
                 'onconet_version': app.config['ONCONET_VERSION'],
                 'oncodata_version': app.config['ONCODATA_VERSION'],
-                'log_file': app.config['LOGFILE']
+                'log_file': LOG_FILE
                 }
     try:
         dicoms = request.files.getlist('dicom')

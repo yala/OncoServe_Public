@@ -12,7 +12,6 @@ class Config(object):
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCODATA_ARGS = Args(ONCODATA_CONFIG)
-    LOGFILE = 'LOGS'
     ONCOSERVE_VERSION = '0.1.0'
     ONCODATA_VERSION = '0.1.0'
     ONCONET_VERSION =  '0.0.9'
@@ -31,7 +30,6 @@ class DensityConfig(Config):
         'img_size': [256,256],
         'num_chan': 3,
         'num_gpus': 1,
-        'cuda': True,
         'model_name': 'resnet18',
         'test_image_transformers': ['scale_2d'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],

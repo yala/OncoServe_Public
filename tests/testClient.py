@@ -7,11 +7,11 @@ import pdb
 class Test_MIT_App(unittest.TestCase):
 
     def setUp(self):
-        self.f1 = open("sample_dicoms/1.dcm", 'rb')
-        self.f2 = open("sample_dicoms/2.dcm", 'rb')
-        self.f3 = open("sample_dicoms/3.dcm", 'rb')
-        self.f4 = open("sample_dicoms/4.dcm", 'rb')
-        self.bad_f = open("sample_dicoms/bad.txt", 'rb')
+        self.f1 = open("/home/yala/sample_dicoms/1.dcm", 'rb')
+        self.f2 = open("/home/yala/sample_dicoms/2.dcm", 'rb')
+        self.f3 = open("/home/yala/sample_dicoms/3.dcm", 'rb')
+        self.f4 = open("/home/yala/sample_dicoms/4.dcm", 'rb')
+        self.bad_f = open("/home/yala/sample_dicoms/bad.txt", 'rb')
         self.MRN = '2553222'
         self.ACCESSION = '12117409'
         self.METADATA = {'mrn':self.MRN, 'accession': self.ACCESSION}
