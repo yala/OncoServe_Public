@@ -34,16 +34,25 @@ def serve():
     '''
         API to serve a model from OncoNet
         Takes a list of dicom files, and a list of optional keys
-        i.e { dicoms: [bytes, bytes, bytes], additional: {} }
+        i.e { dicoms: [bytes, bytes, bytes], data: { optional metadata} }
         and returns:
-            { prediction: Y, additional: {}}
+            { prediction: Y, metadata: {}, model_name : NAME,
+            oncoserve_version: X.X.X, onconet_version: X.X.X,
+            oncodata_version: X.X.X}
 
-        Additional is meant to contain things like MRN, ACCESSION and any
-        additional metadata for object tracking. The configuration of the model used to produce Y is set in the app configuration.
+        Prediction is the exam level prediction over dicoms.
+        Model_name defines what predictor is running: i.e density, risk etc.
+        Metadata is meant to contain things like MRN, ACCESSION and any
+        additional metadata for object tracking.
+        OncoServe_version is the version of the model deployment framework
+        OncoNet_version is the version of the research model framework
+        OncoData_version is the version of the dicom conversion framework
+
+        The configuration of the model used to produce Y is set in the app configuration. See config.py for config objects.
     '''
     logger.info("Serving request...")
     response = {
-                'additional': additional,
+                'metadata': additional,
                 'model_name': app.config['NAME'],
                 'oncoserve_version': app.config['ONCOSERVE_VERSION'],
                 'onconet_version': app.config['ONCONET_VERSION'],
