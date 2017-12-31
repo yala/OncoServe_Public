@@ -1,28 +1,73 @@
 import urllib2
 import json
 import requests
+import unittest
 
-DOMAIN = "https://emimld01.partners.org/MLWadoProxyService/api/{}"
-OBJ_ENDPOINT = DOMAIN.format("MLImagesGetDataAPI")
-DICOM_ENDPOINT = DOMAIN.format("MLImagesGetDicomImageAPI")
-PNG_ENDPOINT = DOMAIN.format("MLImagesGetPNGImageAPI")
+class Test_MIT_App(unittest.TestCase):
 
-MRN = '2553222'
-ACCESSION = '12117409'
-METADATA = {'mrn':MRN, 'accession': ACCESSION}
+    def setUp(self):
+        self.f1 = open("sample_dicoms/1.dcm", 'rb')
+        self.f2 = open("sample_dicoms/2.dcm", 'rb')
+        self.f3 = open("sample_dicoms/3.dcm", 'rb')
+        self.f4 = open("sample_dicoms/4.dcm", 'rb')
+        self.MRN = '2553222'
+        self.ACCESSION = '12117409'
+        self.METADATA = {'mrn':MRN, 'accession': ACCESSION}
 
+    def tearDown(self):
+        self.f1.close()
+        self.f2.close()
+        self.f3.close()
+        self.f4.close()
 
-## Get UIDS
+    def test_normal_request(self):
 
-obj_uid_response = requests.post(OBJ_ENDPOINT , params={'accession':ACCESSION, 'mrn':MRN})
+        # Demo of how to use MIT APP
 
-f1 = open("sample_dicoms/1.dcm", 'rb')
-f2 = open("sample_dicoms/2.dcm", 'rb')
-f3 = open("sample_dicoms/3.dcm", 'rb')
-f4 = open("sample_dicoms/4.dcm", 'rb')
+        '''
+         1. Load dicoms. Make sure to filter by view, MIT app will not take responsibility for this.
+        '''
 
-dicoms = [('dicom',f1), ('dicom',f2), ('dicom',f3), ('dicom',f4)]
+        dicoms = [('dicom',self.f1), ('dicom',self.f2), ('dicom',self.f3), ('dicom', self.f4)]
 
-r = requests.post("http://localhost:5000/serve", files=dicoms, data=METADATA)
+        '''
+        2. Send request to model at /serve with dicoms in files field, and any metadata in the data field.
+        Note, files should contain a list of tuples:
+         [ ('dicom': bytes), '(dicom': bytes)', ('dicom': bytes) ].
+        Deviating from this may result in unexpected behavior.
+        '''
+        r = requests.post("http://localhost:5000/serve", files=dicoms,
+                          data=self.METADATA)
+        '''
+        3. Results will contain prediction, status, version info, all original metadata
+        '''
+        print(r.__dict__)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r._content['prediction'], 3)
+        self.assertEqual(r._content['metadata']['mrn'], self.MRN)
+        self.assertEqual(r._content['metadata']['accession'], self.ACCESSION)
 
-print(r.__dict__)
+    def test_bad_dicom_request(self):
+
+        # Example of failed request:
+        '''
+            1. Get faulty dicoms
+        '''
+        dicoms = [('dicom',self.f1), ('dicom', None), ('dicom', self.f3), ('dicom', self.f4)]
+        '''
+            2. Send request to model at /serve with dicoms in files field, and any metadata in the data field
+        '''
+        r = requests.post("http://localhost:5000/serve", files=dicoms,
+                          data=self.METADATA)
+        '''
+            3. Results will contain prediction == None, and an error code about
+            which dicom couldn't convert
+        '''
+        print(r.__dict__)
+        self.assertEqual(r.status_code, 500)
+        self.assertEqual(r._content['prediction'], None)
+        self.assertEqual(r._content['metadata']['mrn'], self.MRN)
+        self.assertEqual(r._content['metadata']['accession'], self.ACCESSION)
+
+if __name__ == '__main__':
+    unittest.main()
