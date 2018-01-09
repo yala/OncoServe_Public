@@ -3,6 +3,10 @@ import json
 import requests
 import unittest
 import pdb
+import os, shutil
+from os.path import dirname, realpath
+import sys
+sys.path.append(dirname(dirname(realpath(__file__))))
 import oncoserve.aggregators.basic as aggregators
 
 class Test_MIT_App(unittest.TestCase):
