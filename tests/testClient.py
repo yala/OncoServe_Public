@@ -3,6 +3,7 @@ import json
 import requests
 import unittest
 import pdb
+import oncoserve.aggregators.basic as aggregators
 
 class Test_MIT_App(unittest.TestCase):
 
@@ -73,6 +74,24 @@ class Test_MIT_App(unittest.TestCase):
         self.assertEqual(content['prediction'], None)
         self.assertEqual(content['metadata']['mrn'], self.MRN)
         self.assertEqual(content['metadata']['accession'], self.ACCESSION)
+
+    def test_max_aggregator(self):
+
+        examples = [ ([1,3,4,10,10.1], 10.1) ,
+                     ([1], 1),
+                     ([1,3,4,10,-10.1], 10.1) ]
+
+        for preds, ans in examples:
+            self.assertEqual(aggregators.aggregate_max(preds), ans)
+
+    def test_vote_aggregator(self):
+        examples = [ ([1,3,4, 1], 1) ,
+                     ([1, 1, 1, 3, 3], 1),
+                     ([5,5,5,5, 1], 5) ]
+
+        for preds, ans in examples:
+            self.assertEqual(aggregators.aggregate_vote(preds), ans)
+
 
 if __name__ == '__main__':
     unittest.main()

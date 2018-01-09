@@ -8,7 +8,7 @@ def aggregate_max(preds):
 @RegisterExamAggregator("vote")
 def aggregate_vote(preds):
     counts = np.bincount(preds)
-    max_indx = np.argmax(counts)
-    return preds[max_indx]
+    max_vote = np.argmax(counts)
+    return max_vote
 
 
