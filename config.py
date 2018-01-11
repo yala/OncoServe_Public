@@ -14,7 +14,6 @@ class Config(object):
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCODATA_ARGS = Args(ONCODATA_CONFIG)
-    LOGFILE = 'LOGS'
     ONCOSERVE_VERSION = '0.1.0'
     ONCODATA_VERSION = '0.1.0'
     ONCONET_VERSION =  '0.0.9'
