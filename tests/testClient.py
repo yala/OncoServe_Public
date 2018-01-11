@@ -9,6 +9,8 @@ import sys
 sys.path.append(dirname(dirname(realpath(__file__))))
 import oncoserve.aggregators.basic as aggregators
 
+DOMAIN = "http://localhost:5000"
+
 class Test_MIT_App(unittest.TestCase):
 
     def setUp(self):
@@ -44,7 +46,7 @@ class Test_MIT_App(unittest.TestCase):
          [ ('dicom': bytes), '(dicom': bytes)', ('dicom': bytes) ].
         Deviating from this may result in unexpected behavior.
         '''
-        r = requests.post("http://localhost:5000/serve", files=dicoms,
+        r = requests.post(os.path.join(DOMAIN,"serve"), files=dicoms,
                           data=self.METADATA)
         '''
         3. Results will contain prediction, status, version info, all original metadata
@@ -57,7 +59,6 @@ class Test_MIT_App(unittest.TestCase):
         self.assertEqual(content['metadata']['accession'], self.ACCESSION)
 
     def test_bad_dicom_request(self):
-
         # Example of failed request:
         '''
             1. Get faulty dicoms
@@ -66,7 +67,7 @@ class Test_MIT_App(unittest.TestCase):
         '''
             2. Send request to model at /serve with dicoms in files field, and any metadata in the data field
         '''
-        r = requests.post("http://localhost:5000/serve", files=dicoms,
+        r = requests.post( os.path.join(DOMAIN,"serve"), files=dicoms,
                           data=self.METADATA)
         '''
             3. Results will contain prediction == None, and an error code about

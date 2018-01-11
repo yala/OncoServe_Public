@@ -36,7 +36,7 @@ class DensityConfig(Config):
         'test_image_transformers': ['scale_2d'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        'snapshot': '/Mounts/Isilon/best_4way.pt',
+        'snapshot': 'snapshots/best_4way.pt',
         'label_map': [1, 2, 3, 4],
         'make_fc': False
     }
