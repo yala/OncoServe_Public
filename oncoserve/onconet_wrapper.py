@@ -14,7 +14,7 @@ MODEL_MESSAGE = "OncoNet- Model successfully loaded from : {}"
 AGGREGATOR_MESSAGE = "OncoNet- Aggregator [{}] succesfully loaded"
 IMG_CLASSIF_MESSAGE = "OncoNet- Image classification produced {}"
 EXAM_CLASSIF_MESSAGE = "OncoNet- Exam classification complete!"
-
+ERR_MSG = "OncoNet- Fail to label exam. Exception: {}"
 
 class OncoNetWrapper(object):
     def __init__(self, args, aggregator_name, logger):
@@ -37,17 +37,21 @@ class OncoNetWrapper(object):
 
 
     def process_image(self, image):
-        ## Apply transformers
-        x = self.transformer(image, self.args.additional)
-        x = x.unsqueeze(0)
-        x = autograd.Variable(x)
-        if self.args.cuda:
-            x = x.cuda()
-        pred_y = self.model(x)
-        #Find max pred
-        pred_y = self.args.label_map[ pred_y.cpu().data.numpy().argmax() ]
-        self.logger.info(IMG_CLASSIF_MESSAGE.format(pred_y))
-        return pred_y
+        try:
+            ## Apply transformers
+            x = self.transformer(image, self.args.additional)
+            x = x.unsqueeze(0)
+            x = autograd.Variable(x)
+            if self.args.cuda:
+                x = x.cuda()
+            pred_y = self.model(x)
+            #Find max pred
+            pred_y = self.args.label_map[ pred_y.cpu().data.numpy().argmax() ]
+            self.logger.info(IMG_CLASSIF_MESSAGE.format(pred_y))
+            return pred_y
+        except Exception, e:
+            err_msg = ERR_MSG.format(e)
+            raise Exception(err_msg)
 
     def process_exam(self, images):
         preds = []
