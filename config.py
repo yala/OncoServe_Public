@@ -27,8 +27,8 @@ class DensityConfig(Config):
     ONCONET_CONFIG = {
         'cuda': False,
         'dropout': .1,
-        'img_mean': 0.116562376848,
-        'img_std': 0.192259717494,
+        'img_mean': 7662.53827604,
+        'img_std': 12604.0682836,
         'img_size': [256,256],
         'num_chan': 3,
         'num_gpus': 1,

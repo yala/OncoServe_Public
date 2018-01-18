@@ -3,6 +3,13 @@ import json
 import requests
 import unittest
 import pdb
+import os, shutil
+from os.path import dirname, realpath
+import sys
+sys.path.append(dirname(dirname(realpath(__file__))))
+import oncoserve.aggregators.basic as aggregators
+
+DOMAIN = "http://localhost:5000"
 
 class Test_MIT_App(unittest.TestCase):
 
@@ -39,7 +46,7 @@ class Test_MIT_App(unittest.TestCase):
          [ ('dicom': bytes), '(dicom': bytes)', ('dicom': bytes) ].
         Deviating from this may result in unexpected behavior.
         '''
-        r = requests.post("http://localhost:5000/serve", files=dicoms,
+        r = requests.post(os.path.join(DOMAIN,"serve"), files=dicoms,
                           data=self.METADATA)
         '''
         3. Results will contain prediction, status, version info, all original metadata
@@ -52,7 +59,6 @@ class Test_MIT_App(unittest.TestCase):
         self.assertEqual(content['metadata']['accession'], self.ACCESSION)
 
     def test_bad_dicom_request(self):
-
         # Example of failed request:
         '''
             1. Get faulty dicoms
@@ -61,7 +67,7 @@ class Test_MIT_App(unittest.TestCase):
         '''
             2. Send request to model at /serve with dicoms in files field, and any metadata in the data field
         '''
-        r = requests.post("http://localhost:5000/serve", files=dicoms,
+        r = requests.post( os.path.join(DOMAIN,"serve"), files=dicoms,
                           data=self.METADATA)
         '''
             3. Results will contain prediction == None, and an error code about
@@ -73,6 +79,24 @@ class Test_MIT_App(unittest.TestCase):
         self.assertEqual(content['prediction'], None)
         self.assertEqual(content['metadata']['mrn'], self.MRN)
         self.assertEqual(content['metadata']['accession'], self.ACCESSION)
+
+    def test_max_aggregator(self):
+
+        examples = [ ([1,3,4,10,10.1], 10.1) ,
+                     ([1], 1),
+                     ([1,3,4,10,-10.1], 10.1) ]
+
+        for preds, ans in examples:
+            self.assertEqual(aggregators.aggregate_max(preds), ans)
+
+    def test_vote_aggregator(self):
+        examples = [ ([1,3,4, 1], 1) ,
+                     ([1, 1, 1, 3, 3], 1),
+                     ([5,5,5,5, 1], 5) ]
+
+        for preds, ans in examples:
+            self.assertEqual(aggregators.aggregate_vote(preds), ans)
+
 
 if __name__ == '__main__':
     unittest.main()
