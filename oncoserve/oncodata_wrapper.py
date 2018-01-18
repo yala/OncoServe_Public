@@ -3,6 +3,7 @@ import uuid
 import oncoserve.logger
 from oncodata.dicom_to_png.dicom_to_png import dicom_to_png_dcmtk, dicom_to_png_imagemagick
 from PIL import Image
+import pdb
 
 
 NO_CONVERTOR_MSG = 'OncoData- Converter choice {} not recognized!'
@@ -42,16 +43,17 @@ def get_pngs(dicoms, args, logger):
     convertor = get_converter(args, logger)
     images = []
     for key, dicom in enumerate(dicoms):
-        if not os.path.exists(args.temp_img_dir):
+        try:
             os.makedirs(args.temp_img_dir)
-        dicom_path = os.path.join(args.temp_img_dir, str(uuid.uuid4()))
-        png_path = os.path.join(args.temp_img_dir, str(uuid.uuid4()))
+        except Exception as e:
+            pass
+        dicom_path = "{}.dcm".format(os.path.join(args.temp_img_dir, str(uuid.uuid4())))
+        png_path = "{}.png".format(os.path.join(args.temp_img_dir, str(uuid.uuid4())))
 
         remove_if_exist(dicom_path)
         remove_if_exist(png_path)
 
         dicom.save(dicom_path)
-
         convertor(dicom_path, png_path, skip_existing=False)
 
         try:

@@ -9,7 +9,8 @@ import sys
 sys.path.append(dirname(dirname(realpath(__file__))))
 import oncoserve.aggregators.basic as aggregators
 
-DOMAIN = "http://localhost:5000"
+DOMAIN = "http://localhost:5001"
+#DOMAIN = "http://EMIMGMLTEST.partners.org:5000"
 
 class Test_MIT_App(unittest.TestCase):
 
@@ -24,14 +25,16 @@ class Test_MIT_App(unittest.TestCase):
         self.METADATA = {'mrn':self.MRN, 'accession': self.ACCESSION}
 
     def tearDown(self):
-        self.f1.close()
-        self.f2.close()
-        self.f3.close()
-        self.f4.close()
-        self.bad_f.close()
+        try:
+            self.f1.close()
+            self.f2.close()
+            self.f3.close()
+            self.f4.close()
+            self.bad_f.close()
+        except Exception as e:
+            pass
 
     def test_normal_request(self):
-
         # Demo of how to use MIT APP
 
         '''
@@ -84,7 +87,7 @@ class Test_MIT_App(unittest.TestCase):
 
         examples = [ ([1,3,4,10,10.1], 10.1) ,
                      ([1], 1),
-                     ([1,3,4,10,-10.1], 10.1) ]
+                     ([1,3,4,10,-10.1], 10) ]
 
         for preds, ans in examples:
             self.assertEqual(aggregators.aggregate_max(preds), ans)
@@ -96,6 +99,25 @@ class Test_MIT_App(unittest.TestCase):
 
         for preds, ans in examples:
             self.assertEqual(aggregators.aggregate_vote(preds), ans)
+    
+    def test_normal_request_flood(self):
+
+
+        for _ in range(80):
+            self.setUp()
+            dicoms = [('dicom',self.f1), ('dicom',self.f2), ('dicom',self.f3), ('dicom', self.f4)]
+            r = requests.post(os.path.join(DOMAIN,"serve"), files=dicoms,
+                          data=self.METADATA)
+            if not r.status_code == 200:
+                print(r.__dict__)
+            self.assertEqual(r.status_code, 200)
+            content = json.loads(r.content)
+            self.assertEqual(content['prediction'], 3)
+            self.assertEqual(content['metadata']['mrn'], self.MRN)
+            self.assertEqual(content['metadata']['accession'], self.ACCESSION)
+            self.tearDown()
+
+
 
 
 if __name__ == '__main__':
