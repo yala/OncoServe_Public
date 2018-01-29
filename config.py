@@ -14,11 +14,11 @@ class Config(object):
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCODATA_ARGS = Args(ONCODATA_CONFIG)
-    ONCOSERVE_VERSION = '0.1.0'
+    ONCOSERVE_VERSION = '0.1.1'
     ONCODATA_VERSION = '0.1.0'
-    ONCONET_VERSION =  '0.0.9'
+    ONCONET_VERSION =  '0.1.0'
     NAME = 'BaseConfig'
-    PORT = 5000
+    PORT = 5001
 
 
 class DensityConfig(Config):
@@ -58,16 +58,17 @@ class CancerDetectionConfig(Config):
         return pred[1]
 
     ONCONET_CONFIG = {
-        'cuda': False,
+        'cuda': True,
         'dropout': .1,
         'img_mean': 7662.53827604,
         'img_std': 12604.0682836,
-        'img_size': [256,256],
+        'img_size': [1664,2048],
         'num_chan': 3,
         'num_gpus': 1,
-        'test_image_transformers': ['scale_2d align_to_left'],
+        'test_image_transformers': ['scale_2d', 'align_to_left'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
+        "model_name": "aggregator",
         'snapshot': 'snapshots/cancer_v0.1.1.pt',
         'label_map': cancer_risk_func,
         'make_fc': True
