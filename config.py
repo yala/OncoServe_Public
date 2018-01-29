@@ -42,3 +42,23 @@ class DensityConfig(Config):
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
 
+class CancerDetectionConfig(Config):
+    NAME = '2D_Mammo_Cancer_Detection'
+    AGGREGATION="max"
+    ONCONET_CONFIG = {
+        'cuda': False,
+        'dropout': .1,
+        'img_mean': 7662.53827604,
+        'img_std': 12604.0682836,
+        'img_size': [256,256],
+        'num_chan': 3,
+        'num_gpus': 1,
+        'test_image_transformers': ['scale_2d align_to_left'],
+        'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
+        'additional': None,
+        'snapshot': 'snapshots/cancer_v0.1.1.pt',
+        'label_map': [1, 2, 3, 4],
+        'make_fc': True
+    }
+    ONCONET_ARGS = Args(ONCONET_CONFIG)
+
