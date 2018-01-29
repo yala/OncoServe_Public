@@ -57,7 +57,6 @@ class Test_MIT_App(unittest.TestCase):
         print(r.__dict__)
         self.assertEqual(r.status_code, 200)
         content = json.loads(r.content)
-        self.assertEqual(content['prediction'], 3)
         self.assertEqual(content['metadata']['mrn'], self.MRN)
         self.assertEqual(content['metadata']['accession'], self.ACCESSION)
 
@@ -99,7 +98,7 @@ class Test_MIT_App(unittest.TestCase):
 
         for preds, ans in examples:
             self.assertEqual(aggregators.aggregate_vote(preds), ans)
-    
+
     def test_normal_request_flood(self):
 
 

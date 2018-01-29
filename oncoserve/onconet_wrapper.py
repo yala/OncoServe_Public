@@ -46,7 +46,7 @@ class OncoNetWrapper(object):
                 x = x.cuda()
             pred_y = self.model(x)
             #Find max pred
-            pred_y = self.args.label_map[ pred_y.cpu().data.numpy().argmax() ]
+            pred_y = self.args.label_map( pred_y.cpu().data.numpy() )
             self.logger.info(IMG_CLASSIF_MESSAGE.format(pred_y))
             return pred_y
         except Exception, e:

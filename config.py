@@ -24,6 +24,12 @@ class Config(object):
 class DensityConfig(Config):
     NAME = '2D_Mammo_Breast_Density'
     AGGREGATION="vote"
+
+    def density_label_func(pred):
+        pred = pred.argmax()
+        density_labels = [1,2,3,4]
+        return density_labels[pred]
+
     ONCONET_CONFIG = {
         'cuda': False,
         'dropout': .1,
@@ -37,14 +43,20 @@ class DensityConfig(Config):
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
         'snapshot': 'snapshots/best_4way.pt',
-        'label_map': [1, 2, 3, 4],
+        'label_map': density_label_func,
         'make_fc': False
     }
+
+
     ONCONET_ARGS = Args(ONCONET_CONFIG)
 
 class CancerDetectionConfig(Config):
     NAME = '2D_Mammo_Cancer_Detection'
     AGGREGATION="max"
+
+    def cancer_risk_func(pred):
+        return pred[1]
+
     ONCONET_CONFIG = {
         'cuda': False,
         'dropout': .1,
@@ -57,7 +69,7 @@ class CancerDetectionConfig(Config):
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
         'snapshot': 'snapshots/cancer_v0.1.1.pt',
-        'label_map': [1, 2, 3, 4],
+        'label_map': cancer_risk_func,
         'make_fc': True
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
