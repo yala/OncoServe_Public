@@ -1,18 +1,20 @@
 import logging
 import torch
 import torch.autograd as autograd
+import torch.nn.functional as F
+import numpy as np
 import oncoserve.logger
 import onconet.utils.parsing as parsing
 from  onconet.transformers.basic import ComposeTrans
 import  onconet.transformers.factory as transformer_factory
 import oncoserve.aggregators.factory as aggregator_factory
-import pdb
 
 INIT_MESSAGE = "OncoNet- Initializing OncoNet Wrapper..."
 TRANSF_MESSAGE = "OncoNet- Transfomers succesfully composed"
 MODEL_MESSAGE = "OncoNet- Model successfully loaded from : {}"
 AGGREGATOR_MESSAGE = "OncoNet- Aggregator [{}] succesfully loaded"
-IMG_CLASSIF_MESSAGE = "OncoNet- Image classification produced {}"
+IMG_START_CLASSIF_MESSAGE = "OncoNet- Image classification start with tensor size {}"
+IMG_FINISH_CLASSIF_MESSAGE = "OncoNet- Image classification produced {}"
 EXAM_CLASSIF_MESSAGE = "OncoNet- Exam classification complete!"
 ERR_MSG = "OncoNet- Fail to label exam. Exception: {}"
 
@@ -42,12 +44,16 @@ class OncoNetWrapper(object):
             x = self.transformer(image, self.args.additional)
             x = x.unsqueeze(0)
             x = autograd.Variable(x)
+            self.logger.info(IMG_START_CLASSIF_MESSAGE.format(x.size()))
             if self.args.cuda:
                 x = x.cuda()
-            pred_y = self.model(x)
-            #Find max pred
+                self.model = self.model.cuda()
+            else:
+                self.model = self.model.cpu()
+            ## Index 0 to toss batch dimension
+            pred_y = F.softmax(self.model(x))[0]
             pred_y = self.args.label_map( pred_y.cpu().data.numpy() )
-            self.logger.info(IMG_CLASSIF_MESSAGE.format(pred_y))
+            self.logger.info(IMG_FINISH_CLASSIF_MESSAGE.format(pred_y))
             return pred_y
         except Exception, e:
             err_msg = ERR_MSG.format(e)
@@ -58,5 +64,7 @@ class OncoNetWrapper(object):
         for im in images:
             preds.append(self.process_image(im))
         y = self.aggregator(preds)
+        if isinstance(y, np.generic):
+            y = y.item()
         self.logger.info(EXAM_CLASSIF_MESSAGE)
         return y

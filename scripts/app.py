@@ -71,7 +71,6 @@ def serve():
         msg = 'OK'
         response['prediction'] = y
         response['msg'] = msg
-
         return jsonify(response), HTTP_200_OK
 
     except Exception as e:

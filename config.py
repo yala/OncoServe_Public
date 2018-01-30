@@ -18,7 +18,7 @@ class Config(object):
     ONCODATA_VERSION = '0.1.0'
     ONCONET_VERSION =  '0.1.0'
     NAME = 'BaseConfig'
-    PORT = 5001
+    PORT = 5000
 
 
 class DensityConfig(Config):
@@ -58,10 +58,10 @@ class CancerDetectionConfig(Config):
         return pred[1]
 
     ONCONET_CONFIG = {
-        'cuda': True,
+        'cuda': False,
         'dropout': .1,
-        'img_mean': 7662.53827604,
-        'img_std': 12604.0682836,
+        'img_mean': 7240.058,
+        'img_std': 12072.904,
         'img_size': [1664,2048],
         'num_chan': 3,
         'num_gpus': 1,
