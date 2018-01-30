@@ -12,19 +12,18 @@ into production environments.
 ## How to run it?
 Docker image for most recent version is at:
 
-yala/oncoserve:0.1.0
+yala/oncoserve:0.1.1
 
 
 The docker container takes the following environment variables:
 - LOGFILE: Where to write info+error logs to.
 - CONFIG_NAME: Which app configuration to use. config.DensityConf is the
-density application. Later down the line, config.cancerRisk will represent the
-the risk application.
+density application. config.CancerDetectionConfig is the risk application.
 - TMP_IMG_DIR: Where to store temporary files
 
 You can run the density app with the following command:
 
-```docker run -p 5000:5000 -e LOGFILE=LOGS -e CONFIG_NAME=config.DensityConfig -e TMP_IMG_DIR=/OncoServe/tmp_images  -v ~/OncoServe/LOGS:/OncoServe/LOGS  -v ~/OncoServe/tmp_images:/OncoServe/tmp_images yala/oncoserve:0.1.0```
+```docker run -p 5000:5000 -e LOGFILE=LOGS -e CONFIG_NAME=config.DensityConfig -e TMP_IMG_DIR=/OncoServe/tmp_images  -v ~/OncoServe/LOGS:/OncoServe/LOGS  -v ~/OncoServe/tmp_images:/OncoServe/tmp_images yala/oncoserve:0.1.1```
 
 ## How to use it?
 See `tests/testClient.py` for a usage example in python.
