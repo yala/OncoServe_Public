@@ -8,6 +8,7 @@ import onconet.utils.parsing as parsing
 from  onconet.transformers.basic import ComposeTrans
 import  onconet.transformers.factory as transformer_factory
 import oncoserve.aggregators.factory as aggregator_factory
+import pdb
 
 INIT_MESSAGE = "OncoNet- Initializing OncoNet Wrapper..."
 TRANSF_MESSAGE = "OncoNet- Transfomers succesfully composed"
@@ -51,11 +52,11 @@ class OncoNetWrapper(object):
             else:
                 self.model = self.model.cpu()
             ## Index 0 to toss batch dimension
-            pred_y = F.softmax(self.model(x))[0]
+            pred_y = F.softmax(self.model(x)[0])[0]
             pred_y = self.args.label_map( pred_y.cpu().data.numpy() )
             self.logger.info(IMG_FINISH_CLASSIF_MESSAGE.format(pred_y))
             return pred_y
-        except Exception, e:
+        except Exception as e:
             err_msg = ERR_MSG.format(e)
             raise Exception(err_msg)
 

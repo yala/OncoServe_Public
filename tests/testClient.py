@@ -1,4 +1,3 @@
-import urllib2
 import json
 import requests
 import unittest
@@ -9,7 +8,7 @@ import sys
 sys.path.append(dirname(dirname(realpath(__file__))))
 import oncoserve.aggregators.basic as aggregators
 
-DOMAIN = "http://localhost:5001"
+DOMAIN = "http://localhost:5000"
 #DOMAIN = "http://EMIMGMLTEST.partners.org:5000"
 
 class Test_MIT_App(unittest.TestCase):

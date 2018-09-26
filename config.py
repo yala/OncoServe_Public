@@ -33,8 +33,8 @@ class DensityConfig(Config):
     ONCONET_CONFIG = {
         'cuda': False,
         'dropout': .1,
-        'img_mean': 7662.53827604,
-        'img_std': 12604.0682836,
+        'img_mean': [7662.53827604],
+        'img_std': [12604.0682836],
         'img_size': [256,256],
         'num_chan': 3,
         'num_gpus': 1,
@@ -42,9 +42,11 @@ class DensityConfig(Config):
         'test_image_transformers': ['scale_2d'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        'snapshot': 'snapshots/best_4way.pt',
+        'snapshot': 'snapshots/best_4way_py3.pt',
         'label_map': density_label_func,
-        'make_fc': False
+        'video':False,
+        'use_precomputed_hiddens': False,
+        'use_risk_factors':False
     }
 
 
@@ -59,6 +61,7 @@ class CancerDetectionConfig(Config):
 
     ONCONET_CONFIG = {
         'cuda': False,
+
         'dropout': .1,
         'img_mean': 7240.058,
         'img_std': 12072.904,

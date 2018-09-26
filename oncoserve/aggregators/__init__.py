@@ -1,1 +1,1 @@
-import basic
+import oncoserve.aggregators.basic
