@@ -13,9 +13,10 @@ RUN apt-get --yes --force-yes install dcmtk
 RUN pip install -r requirements.txt
 RUN pip install -r OncoNet/requirements.txt
 RUN pip install -r OncoData/requirements.txt
+RUN pip install -r OncoQueries/requiremnets.txt
 
 # Remove git hist
-RUN rm -rf .git OncoNet/.git OncoData/.git
+RUN rm -rf .git OncoNet/.git OncoData/.git OncoQueries/.git
 # Remove unecessary dirs
 
 
