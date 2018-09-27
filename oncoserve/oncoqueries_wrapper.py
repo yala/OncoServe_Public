@@ -35,16 +35,6 @@ def get_risk_factors(args, ssn, exam, json_dir, logger):
         pass
     args.metadata_path = "{}.json".format(os.path.join(json_dir, str(uuid.uuid4())))
     args.risk_factor_metadata_path = "{}.json".format(os.path.join(json_dir, str(uuid.uuid4())))
-    # Write current request to a file to use as a metadata path
-    metadata_json = [{'ssn':ssn, 'accessions':[{'accession':exam}]}]
-
-    try:
-        json.dump(metadata_json, open(args.metadata_path,'w'))
-    except Exception as e:
-        delete_jsons(args)
-        err_msg = FAIL_TO_SAVE_METADATA_MESSAGE.format(ssn, exam, e, args)
-        logger.error(err_msg)
-        raise Exception(err_msg)
 
     # Call OncoQueries with specifc SSN and ACCESSION to get risk factor metadata json
     oncoqueries_command = 'python OncoQueries/scripts/from_db/create_risk_factor_metadata.py --save_path {} --patient_mrn {} --patient_accession {}'.format(
@@ -54,6 +44,22 @@ def get_risk_factors(args, ssn, exam, json_dir, logger):
     except Exception as e:
         delete_jsons(args)
         err_msg = FAIL_TO_SAVE_RISK_METADATA_MESSAGE.format(ssn, exam, e, args)
+        logger.error(err_msg)
+        raise Exception(err_msg)
+
+    # Write current request to a file to use as a metadata path
+    risk_metadata_json = json.load(open(args.risk_factor_metadata_path,'r'))
+    prior_hist = risk_metadata[ssn]['any_breast_cancer'] == 1
+    metadata_json = [{'ssn':ssn, 'accessions':[
+                                        {'accession':exam, 
+                                        'prior_hist': prior_hist}]}]
+
+
+    try:
+        json.dump(metadata_json, open(args.metadata_path,'w'))
+    except Exception as e:
+        delete_jsons(args)
+        err_msg = FAIL_TO_SAVE_METADATA_MESSAGE.format(ssn, exam, e, args)
         logger.error(err_msg)
         raise Exception(err_msg)
 
