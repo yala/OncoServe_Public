@@ -44,7 +44,7 @@ class OncoNetWrapper(object):
             ## Apply transformers
             x = self.transformer(image, self.args.additional)
             x = autograd.Variable(x.unsqueeze(0))
-            risk_factors = autograd.Variable(risk_factor_vector.unsqueeze(0))
+            risk_factors = autograd.Variable(risk_factor_vector.unsqueeze(0)) if risk_factor_vector is not None else None
             self.logger.info(IMG_START_CLASSIF_MESSAGE.format(x.size()))
             if self.args.cuda:
                 x = x.cuda()
@@ -60,10 +60,10 @@ class OncoNetWrapper(object):
             err_msg = ERR_MSG.format(e)
             raise Exception(err_msg)
 
-    def process_exam(self, images):
+    def process_exam(self, images, risk_factor_vector):
         preds = []
         for im in images:
-            preds.append(self.process_image(im))
+            preds.append(self.process_image(im, risk_factor_vector))
         y = self.aggregator(preds)
         if isinstance(y, np.generic):
             y = y.item()
