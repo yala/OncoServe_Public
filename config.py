@@ -33,17 +33,15 @@ class DensityConfig(Config):
 
     ONCONET_CONFIG = {
         'cuda': False,
-        'dropout': .1,
         'img_mean': [7662.53827604],
         'img_std': [12604.0682836],
         'img_size': [256,256],
         'num_chan': 3,
         'num_gpus': 1,
-        'model_name': 'resnet18',
         'test_image_transformers': ['scale_2d'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        'snapshot': 'snapshots/best_4way_py3.pt',
+        'snapshot': 'snapshots/mgh_mammo_density_sep26_2018.pt',
         'label_map': density_label_func,
         'video':False,
         'use_precomputed_hiddens': False,
@@ -62,23 +60,23 @@ class MammoCancer1YrDetectionConfig(Config):
 
     ONCONET_CONFIG = {
         'cuda': False,
-        'dropout': .1,
-        'img_mean': 7240.058,
-        'img_std': 12072.904,
+        'img_mean': [7240.058],
+        'img_std': [12072.904],
         'img_size': [1664,2048],
         'num_chan': 3,
         'num_gpus': 1,
         'test_image_transformers': ['scale_2d', 'align_to_left'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        "model_name": "resnet18",
         'label_map': cancer_risk_func,
-        'snapshot': 'snapshots/cancer_1yr_sep12_2018.pt',
+        'snapshot': 'snapshots/mgh_mammo_cancer_1yr_detection_sep02_2018.pt',
         'video':False,
         'use_precomputed_hiddens': False,
         'use_risk_factors': True,
-        'risk_factor_keys': ["density binary_family_history binary_biopsy_benign binary_biopsy_LCIS binary_biopsy_atypical_hyperplasia age menarche_age menopause_age first_pregnancy_age prior_hist race parous menopausal_status weight height ovarian_cancer ovarian_cancer_age ashkenazi brca mom_bc_cancer_history m_aunt_bc_cancer_history p_aunt_bc_cancer_history m_grandmother_bc_cancer_history p_grantmother_bc_cancer_history sister_bc_cancer_history mom_oc_cancer_history m_aunt_oc_cancer_history p_aunt_oc_cancer_history m_grandmother_oc_cancer_history p_grantmother_oc_cancer_history sister_oc_cancer_history hrt_type hrt_duration hrt_years_ago_stopped"],
+        'risk_factor_keys': "density binary_family_history binary_biopsy_benign binary_biopsy_LCIS binary_biopsy_atypical_hyperplasia age menarche_age menopause_age first_pregnancy_age prior_hist race parous menopausal_status weight height ovarian_cancer ovarian_cancer_age ashkenazi brca mom_bc_cancer_history m_aunt_bc_cancer_history p_aunt_bc_cancer_history m_grandmother_bc_cancer_history p_grantmother_bc_cancer_history sister_bc_cancer_history mom_oc_cancer_history m_aunt_oc_cancer_history p_aunt_oc_cancer_history m_grandmother_oc_cancer_history p_grantmother_oc_cancer_history sister_oc_cancer_history hrt_type hrt_duration hrt_years_ago_stopped",
+        'use_region_annotation': False
     }
+    ONCONET_CONFIG['risk_factor_keys'] = ONCONET_CONFIG['risk_factor_keys'].split()
     ONCONET_ARGS = Args(ONCONET_CONFIG)
 
 class MammoCancer5YrRiskConfig(Config):
@@ -90,21 +88,22 @@ class MammoCancer5YrRiskConfig(Config):
 
     ONCONET_CONFIG = {
         'cuda': False,
-        'dropout': .1,
-        'img_mean': 7240.058,
-        'img_std': 12072.904,
+        'img_mean': [7240.058],
+        'img_std': [12072.904],
         'img_size': [1664,2048],
         'num_chan': 3,
         'num_gpus': 1,
         'test_image_transformers': ['scale_2d', 'align_to_left'],
         'test_tensor_transformers': ["force_num_chan_2d", "normalize_2d"],
         'additional': None,
-        "model_name": "resnet18",
         'label_map': cancer_risk_func,
-        'snapshot': 'snapshots/cancer_5yr_sep12_2018.pt',
+        'snapshot': 'snapshots/mgh_mammo_cancer_5yr_detection_hybrid_aug08_2018.pt',
         'video':False,
         'use_precomputed_hiddens': False,
         'use_risk_factors': True,
-        'risk_factor_keys': ["density binary_family_history binary_biopsy_benign binary_biopsy_LCIS binary_biopsy_atypical_hyperplasia age menarche_age menopause_age first_pregnancy_age prior_hist race parous menopausal_status weight height ovarian_cancer ovarian_cancer_age ashkenazi brca mom_bc_cancer_history m_aunt_bc_cancer_history p_aunt_bc_cancer_history m_grandmother_bc_cancer_history p_grantmother_bc_cancer_history sister_bc_cancer_history mom_oc_cancer_history m_aunt_oc_cancer_history p_aunt_oc_cancer_history m_grandmother_oc_cancer_history p_grantmother_oc_cancer_history sister_oc_cancer_history hrt_type hrt_duration hrt_years_ago_stopped"],
+        'risk_factor_keys': "density binary_family_history binary_biopsy_benign binary_biopsy_LCIS binary_biopsy_atypical_hyperplasia age menarche_age menopause_age first_pregnancy_age prior_hist race parous menopausal_status weight height ovarian_cancer ovarian_cancer_age ashkenazi brca mom_bc_cancer_history m_aunt_bc_cancer_history p_aunt_bc_cancer_history m_grandmother_bc_cancer_history p_grantmother_bc_cancer_history sister_bc_cancer_history mom_oc_cancer_history m_aunt_oc_cancer_history p_aunt_oc_cancer_history m_grandmother_oc_cancer_history p_grantmother_oc_cancer_history sister_oc_cancer_history hrt_type hrt_duration hrt_years_ago_stopped",
+        "use_region_annotation": False
     }
+    ONCONET_CONFIG['risk_factor_keys'] = ONCONET_CONFIG['risk_factor_keys'].split()
+    ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCONET_ARGS = Args(ONCONET_CONFIG)

@@ -11,6 +11,7 @@ from flask import Flask
 from flask import request, json, jsonify
 import oncoserve.onconet_wrapper as onconet_wrapper
 import oncoserve.oncodata_wrapper as oncodata_wrapper
+import oncoserve.oncoqueries_wrapper as oncoqueries_wrapper
 import pdb
 
 ONCODATA_SUCCESS_MSG = 'Successfully converted dicoms into pngs through OncoData'
@@ -67,12 +68,13 @@ def serve():
         metadata = request.form
         response['metadata'] = metadata
         images = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
+        pdb.set_trace()
         if onconet_args.use_risk_factors:
-            assert 'SSN' in metadata
-            assert 'ACCESSION' in metadata            
+            assert 'mrn' in metadata
+            assert 'accession' in metadata            
             risk_factor_vector = oncoqueries_wrapper.get_risk_factors(onconet_args, 
-                                                                        metadata['SSN'], 
-                                                                        metadata['ACCESSION'], 
+                                                                        metadata['mrn'], 
+                                                                        metadata['accession'], 
                                                                         oncodata_args.temp_img_dir, 
                                                                         logger)
         else:

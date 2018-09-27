@@ -13,8 +13,12 @@ FAIL_TO_GET_RISK_VECTOR_MESSAGE = 'OncoQueries- Fail to get risk_factor_vector g
 SUCCESS_RISK_VEC_MESSAGE = 'OncoQueries- Succesffuly obtained risk_factor_vector for ssn: {}, accession: {} with args: {}'
 
 
-
-def risk_factor_vector(args, ssn, exam, json_dir, logger):
+def delete_jsons(args):
+    for path in [args.metadata_path, args.risk_factor_metadata_path]:
+        if os.path.exists(path):
+            os.remove(path)
+ 
+def get_risk_factors(args, ssn, exam, json_dir, logger):
     '''
     args:
         - args:
@@ -26,7 +30,7 @@ def risk_factor_vector(args, ssn, exam, json_dir, logger):
         - risk_factor_vector:  
     '''
     try:
-        os.makedirs(args.temp_img_dir)
+        os.makedirs(json_dir)
     except Exception as e:
         pass
     args.metadata_path = "{}.json".format(os.path.join(json_dir, str(uuid.uuid4())))
@@ -37,8 +41,7 @@ def risk_factor_vector(args, ssn, exam, json_dir, logger):
     try:
         json.dump(metadata_json, open(args.metadata_path,'w'))
     except Exception as e:
-        if os.path.exists(args.metadata_path):
-            os.remove(args.metadata_path)
+        delete_jsons(args)
         err_msg = FAIL_TO_SAVE_METADATA_MESSAGE.format(ssn, exam, e, args)
         logger.error(err_msg)
         raise Exception(err_msg)
@@ -49,24 +52,22 @@ def risk_factor_vector(args, ssn, exam, json_dir, logger):
     try:
         subprocess.call(oncoqueries_command, shell=True)
     except Exception as e:
-        for path in [args.metadata_path, args.risk_factor_metadata_path]
-            if os.path.exists(path):
-                os.remove(path)
+        delete_jsons(args)
         err_msg = FAIL_TO_SAVE_RISK_METADATA_MESSAGE.format(ssn, exam, e, args)
         logger.error(err_msg)
         raise Exception(err_msg)
 
     # Load risk factor vector from metadata file and del metadata json
     try:
+        pdb.set_trace()
         risk_factor_vectorizer = RiskFactorVectorizer(args)
         sample = {'ssn': ssn, 'exam': exam}
         risk_factor_vector = risk_factor_vectorizer.get_risk_factors_for_sample(sample)
         logger.info(SUCCESS_RISK_VEC_MESSAGE.format(ssn, exam, args))
+        delete_jsons(args)
         return risk_factor_vector
     except Exception as e:
-        for path in [args.metadata_path, args.risk_factor_metadata_path]
-            if os.path.exists(path):
-                os.remove(path)
+        delete_jsons(args)
         err_msg = FAIL_TO_GET_RISK_VECTOR_MESSAGE.format(ssn, exam, e, args)
         logger.error(err_msg)
         raise Exception(err_msg)    
