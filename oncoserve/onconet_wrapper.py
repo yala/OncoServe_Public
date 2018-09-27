@@ -39,12 +39,12 @@ class OncoNetWrapper(object):
         self.logger = logger
 
 
-    def process_image(self, image):
+    def process_image(self, image, risk_factor_vector=None):
         try:
             ## Apply transformers
             x = self.transformer(image, self.args.additional)
-            x = x.unsqueeze(0)
-            x = autograd.Variable(x)
+            x = autograd.Variable(x.unsqueeze(0))
+            risk_factors = autograd.Variable(risk_factor_vector.unsqueeze(0))
             self.logger.info(IMG_START_CLASSIF_MESSAGE.format(x.size()))
             if self.args.cuda:
                 x = x.cuda()
@@ -52,7 +52,7 @@ class OncoNetWrapper(object):
             else:
                 self.model = self.model.cpu()
             ## Index 0 to toss batch dimension
-            pred_y = F.softmax(self.model(x)[0])[0]
+            pred_y = F.softmax(self.model(x, risk_factors)[0])[0]
             pred_y = self.args.label_map( pred_y.cpu().data.numpy() )
             self.logger.info(IMG_FINISH_CLASSIF_MESSAGE.format(pred_y))
             return pred_y

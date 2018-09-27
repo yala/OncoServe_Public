@@ -4,6 +4,7 @@ import sys
 sys.path.append(dirname(dirname(realpath(__file__))))
 sys.path.append(os.path.join(dirname(dirname(realpath(__file__))),'OncoNet'))
 sys.path.append(os.path.join(dirname(dirname(realpath(__file__))), 'OncoData'))
+sys.path.append(os.path.join(dirname(dirname(realpath(__file__))), 'OncoQueries'))
 import sys
 import oncoserve.logger
 from flask import Flask
@@ -65,8 +66,18 @@ def serve():
         metadata = request.form
         response['metadata'] = metadata
         images = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
+        if onconet_args.use_risk_factors:
+            assert 'SSN' in metadata
+            assert 'ACCESSION' in metadata            
+            risk_factor_vector = oncoqueries_wrapper.get_risk_factors(onconet_args, 
+                                                                        metadata['SSN'], 
+                                                                        metadata['ACCESSION'], 
+                                                                        oncodata_args.temp_img_dir, 
+                                                                        logger)
+        else:
+            risk_factor_vector = None
         logger.info(ONCODATA_SUCCESS_MSG)
-        y = onconet.process_exam(images)
+        y = onconet.process_exam(images, risk_factor_vector)
         logger.info(ONCONET_SUCCESS_MSG)
         msg = 'OK'
         response['prediction'] = y
