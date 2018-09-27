@@ -1,4 +1,5 @@
 import logging
+import pickle
 import torch
 import torch.autograd as autograd
 import torch.nn as nn
@@ -34,8 +35,21 @@ class OncoNetWrapper(object):
         self.transformer = ComposeTrans(test_transformers)
         logger.info(TRANSF_MESSAGE)
         self.model = torch.load(args.snapshot)
+        # Unpack models taht were trained as data parallel
         if isinstance(self.model, nn.DataParallel):
             self.model = self.model.module
+        # Add use precomputed hiddens for models trained before it was introduced. 
+        # Assumes a resnet base backbone
+        try:
+            self.model._model.args.use_precomputed_hiddens = args.use_precomputed_hiddens
+        except Exception as e:
+            pass
+        # Load callibrator if desired 
+        if args.callibrator_path is not None:
+            self.callibrator = pickle.load(open(args.callibrator_path,'rb'))
+        else:
+            self.callibrator = None
+
         logger.info(MODEL_MESSAGE.format(args.snapshot))
         self.aggregator = aggregator_factory.get_exam_aggregator(aggregator_name)
 
@@ -56,7 +70,9 @@ class OncoNetWrapper(object):
                 self.model = self.model.cpu()
             ## Index 0 to toss batch dimension
             pred_y = F.softmax(self.model(x, risk_factors)[0])[0]
-            pred_y = self.args.label_map( pred_y.cpu().data.numpy() )
+            pred_y = np.array(self.args.label_map( pred_y.cpu().data.numpy() ))
+            if self.callibrator is not None:
+                pred_y = self.callibrator.predict_proba(pred_y.reshape(-1,1))[0,1]
             self.logger.info(IMG_FINISH_CLASSIF_MESSAGE.format(pred_y))
             return pred_y
         except Exception as e:
