@@ -1,6 +1,7 @@
 import logging
 import torch
 import torch.autograd as autograd
+import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import oncoserve.logger
@@ -33,6 +34,8 @@ class OncoNetWrapper(object):
         self.transformer = ComposeTrans(test_transformers)
         logger.info(TRANSF_MESSAGE)
         self.model = torch.load(args.snapshot)
+        if isinstance(self.model, nn.DataParallel):
+            self.model = self.model.module
         logger.info(MODEL_MESSAGE.format(args.snapshot))
         self.aggregator = aggregator_factory.get_exam_aggregator(aggregator_name)
 

@@ -49,7 +49,7 @@ def get_risk_factors(args, ssn, exam, json_dir, logger):
 
     # Write current request to a file to use as a metadata path
     risk_metadata_json = json.load(open(args.risk_factor_metadata_path,'r'))
-    prior_hist = risk_metadata[ssn]['any_breast_cancer'] == 1
+    prior_hist = risk_metadata_json[ssn]['any_breast_cancer'] == 1
     metadata_json = [{'ssn':ssn, 'accessions':[
                                         {'accession':exam, 
                                         'prior_hist': prior_hist}]}]
@@ -65,7 +65,6 @@ def get_risk_factors(args, ssn, exam, json_dir, logger):
 
     # Load risk factor vector from metadata file and del metadata json
     try:
-        pdb.set_trace()
         risk_factor_vectorizer = RiskFactorVectorizer(args)
         sample = {'ssn': ssn, 'exam': exam}
         risk_factor_vector = risk_factor_vectorizer.get_risk_factors_for_sample(sample)

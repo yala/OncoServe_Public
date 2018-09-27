@@ -14,8 +14,9 @@ import oncoserve.oncodata_wrapper as oncodata_wrapper
 import oncoserve.oncoqueries_wrapper as oncoqueries_wrapper
 import pdb
 
-ONCODATA_SUCCESS_MSG = 'Successfully converted dicoms into pngs through OncoData'
-ONCONET_SUCCESS_MSG = 'Succesfully got prediction from OncoNet for exam'
+ONCODATA_SUCCESS_MSG = 'OncoData- Successfully converted dicoms into pngs through OncoData'
+ONCOQUERIES_SUCCESS_MSG = 'OncoQueries- Successfully obtained risk factors through OncoQueries'
+ONCONET_SUCCESS_MSG = 'OncoNet- Succesfully got prediction from OncoNet for exam'
 ONCOSERVE_FAIL_MSG = 'Error. Could not serve request. Exception: {}'
 HTTP_200_OK = 200
 HTTP_500_INTERNAL_SERVER_ERROR = 500
@@ -68,18 +69,18 @@ def serve():
         metadata = request.form
         response['metadata'] = metadata
         images = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
-        pdb.set_trace()
+        logger.info(ONCODATA_SUCCESS_MSG)
         if onconet_args.use_risk_factors:
             assert 'mrn' in metadata
             assert 'accession' in metadata            
             risk_factor_vector = oncoqueries_wrapper.get_risk_factors(onconet_args, 
-                                                                        metadata['mrn'], 
-                                                                        metadata['accession'], 
-                                                                        oncodata_args.temp_img_dir, 
-                                                                        logger)
+                                            metadata['mrn'], 
+                                            metadata['accession'], 
+                                            oncodata_args.temp_img_dir, 
+                                            logger)
+            logger.info(ONCOQUERIES_SUCCESS_MSG)
         else:
             risk_factor_vector = None
-        logger.info(ONCODATA_SUCCESS_MSG)
         y = onconet.process_exam(images, risk_factor_vector)
         logger.info(ONCONET_SUCCESS_MSG)
         msg = 'OK'
