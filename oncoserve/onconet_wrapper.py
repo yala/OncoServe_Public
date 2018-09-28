@@ -42,6 +42,7 @@ class OncoNetWrapper(object):
         # Assumes a resnet base backbone
         try:
             self.model._model.args.use_precomputed_hiddens = args.use_precomputed_hiddens
+            self.model._model.args.cuda = args.cuda
         except Exception as e:
             pass
         # Load callibrator if desired 
