@@ -38,7 +38,6 @@ class OncoNetWrapper(object):
         # Unpack models taht were trained as data parallel
         if isinstance(self.model, nn.DataParallel):
             self.model = self.model.module
-        pdb.set_trace()
         # Add use precomputed hiddens for models trained before it was introduced. 
         # Assumes a resnet base backbone
         try:
