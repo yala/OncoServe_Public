@@ -13,12 +13,12 @@ RUN apt-get --yes --force-yes install dcmtk
 RUN pip install -r requirements.txt
 RUN pip install -r OncoNet/requirements.txt
 RUN pip install -r OncoData/requirements.txt
-RUN pip install -r OncoQueries/requiremnets.txt
+RUN pip install -r OncoQueries/requirements.txt
 
 # Remove git hist
 RUN rm -rf .git OncoNet/.git OncoData/.git OncoQueries/.git
 # Remove unecessary dirs
-
+RUN rm -rf OncoNet/configs OncoNet/doc OncoNet/scripts
 
 
 # Make port 5000 available to the world outside this container
