@@ -10,11 +10,11 @@ ADD . /OncoServe
 # Install any needed packages specified in requirements.txt
 RUN apt-get update
 RUN apt-get --yes --force-yes install dcmtk
-RUN pip install -r requirements.txt
-RUN pip install -r OncoNet/requirements.txt
-RUN pip install -r OncoData/requirements.txt
+RUN apt-get --yes --force-yes install freetds-dev freetds-bin
 RUN pip install -r OncoQueries/requirements.txt
-
+RUN pip install -r OncoData/requirements.txt
+RUN pip install -r OncoNet/requirements.txt
+RUN pip install -r requirements.txt
 # Remove git hist
 RUN rm -rf .git OncoNet/.git OncoData/.git OncoQueries/.git
 # Remove unecessary dirs
