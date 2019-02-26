@@ -29,4 +29,4 @@ EXPOSE 80
 ENV NAME OncoServe
 
 # Run app.py when the container launches
-CMD python /OncoServe/scripts/app.py
+CMD gunicorn -t 360 --bind 0.0.0.0:5000 wsgi:app
