@@ -54,14 +54,13 @@ def get_pngs(dicoms, args, logger):
         remove_if_exist(png_path)
 
         dicom.save(dicom_path)
-        convertor(dicom_path, png_path, skip_existing=False)
-
+        convertor(dicom_path, png_path, [], skip_existing=False)
         try:
             os.remove(dicom_path)
             images.append(Image.open(png_path))
             os.remove(png_path)
             logger.info(SUCCESS_CONV_MESSAGE.format(key, args.convertor))
-        except Exception, e:
+        except Exception as e:
             if os.path.exists(dicom_path):
                 os.remove(dicom_path)
             err_msg = FAIL_CONVERT_MESSAGE.format(key, e, args.convertor)

@@ -4,3 +4,6 @@
 [submodule "OncoData"]
 	path = OncoData
 	url = git@github.com:swansonk14/OncoData.git
+[submodule "OncoQueries"]
+	path = OncoQueries
+	url = git@github.com:yala/OncoQueries.git
