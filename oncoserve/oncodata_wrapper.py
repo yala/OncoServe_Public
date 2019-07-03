@@ -4,6 +4,7 @@ import oncoserve.logger
 from oncodata.dicom_to_png.dicom_to_png import dicom_to_png_dcmtk, dicom_to_png_imagemagick
 from PIL import Image
 import pdb
+import pydicom
 
 
 NO_CONVERTOR_MSG = 'OncoData- Converter choice {} not recognized!'
@@ -56,10 +57,15 @@ def get_pngs(dicoms, args, logger):
         dicom.save(dicom_path)
         convertor(dicom_path, png_path, [], skip_existing=False)
         try:
+            side, view, permissible_mammogram = get_info(dicom_path)
             os.remove(dicom_path)
-            images.append(Image.open(png_path))
+            if permissible_mammogram:
+                images.append({'x':Image.open(png_path),'side_seq':side, 'view_seq':view})
+                logger.info(SUCCESS_CONV_MESSAGE.format(key, args.convertor))
+            else:
+                logger.info(FAIL_CONVERT_MESSAGE.format(key, "Not permissible_mammogram Err", args.convertor))
             os.remove(png_path)
-            logger.info(SUCCESS_CONV_MESSAGE.format(key, args.convertor))
+
         except Exception as e:
             if os.path.exists(dicom_path):
                 os.remove(dicom_path)
@@ -68,5 +74,15 @@ def get_pngs(dicoms, args, logger):
             raise Exception(err_msg)
 
     return images
+
+def get_info(dicom_path, key):
+    dcm = pydicom.dcmread(dicom_path)
+    view_str = dcm['View Position']
+    side_str = dcm['Image Laterality']
+    series_str = dcm['SOP Class UID']
+    view_seq = 0 if view_str == 'CC' else 1
+    side_seq = 0 if side_str == 'R' else 1
+    dcm_permissible = 'digital mammography' in series_str.lower() and 'for presentation' in series_str.lower() and side_str in ['R','L'] and view_str in ['MLO','CC']
+    return side, view, dcm_permissible
 
 

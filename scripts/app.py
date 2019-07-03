@@ -68,15 +68,15 @@ def serve():
         dicoms = request.files.getlist('dicom')
         metadata = request.form
         response['metadata'] = metadata
-        images = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
+        images  = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
         logger.info(ONCODATA_SUCCESS_MSG)
-        if onconet_args.use_risk_factors:
+        if onconet_args.use_risk_factors and not onconet_args.use_pred_risk_factors_at_test:
             assert 'mrn' in metadata
-            assert 'accession' in metadata            
-            risk_factor_vector = oncoqueries_wrapper.get_risk_factors(onconet_args, 
-                                            metadata['mrn'], 
-                                            metadata['accession'], 
-                                            oncodata_args.temp_img_dir, 
+            assert 'accession' in metadata
+            risk_factor_vector = oncoqueries_wrapper.get_risk_factors(onconet_args,
+                                            metadata['mrn'],
+                                            metadata['accession'],
+                                            oncodata_args.temp_img_dir,
                                             logger)
             logger.info(ONCOQUERIES_SUCCESS_MSG)
         else:
