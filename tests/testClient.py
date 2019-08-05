@@ -99,7 +99,7 @@ class Test_MIT_App(unittest.TestCase):
             self.assertEqual(aggregators.aggregate_vote(preds), ans)
 
     def test_normal_request_flood(self):
-        for _ in range(10):
+        for _ in range(1):
             self.setUp()
             dicoms = [('dicom',self.f1), ('dicom',self.f2), ('dicom',self.f3), ('dicom', self.f4)]
             r = requests.post(os.path.join(DOMAIN,"serve"), files=dicoms,

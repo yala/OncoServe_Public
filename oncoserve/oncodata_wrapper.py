@@ -75,14 +75,14 @@ def get_pngs(dicoms, args, logger):
 
     return images
 
-def get_info(dicom_path, key):
+def get_info(dicom_path):
     dcm = pydicom.dcmread(dicom_path)
-    view_str = dcm['View Position']
-    side_str = dcm['Image Laterality']
-    series_str = dcm['SOP Class UID']
+    view_str = dcm.ViewPosition
+    side_str = dcm.ImageLaterality
+    series_str = dcm.SOPClassUID
     view_seq = 0 if view_str == 'CC' else 1
     side_seq = 0 if side_str == 'R' else 1
-    dcm_permissible = 'digital mammography' in series_str.lower() and 'for presentation' in series_str.lower() and side_str in ['R','L'] and view_str in ['MLO','CC']
-    return side, view, dcm_permissible
+    dcm_permissible =  side_str in ['R','L'] and view_str in ['MLO','CC']
+    return side_seq, view_seq, dcm_permissible
 
 

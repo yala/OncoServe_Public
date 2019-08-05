@@ -289,7 +289,7 @@ class MammoCancerMirai(Config):
         "use_region_annotation": False,
         'risk_factor_keys': "density binary_family_history binary_biopsy_benign binary_biopsy_LCIS binary_biopsy_atypical_hyperplasia age menarche_age menopause_age first_pregnancy_age prior_hist race parous menopausal_status weight height ovarian_cancer ovarian_cancer_age ashkenazi brca mom_bc_cancer_history m_aunt_bc_cancer_history p_aunt_bc_cancer_history m_grandmother_bc_cancer_history p_grantmother_bc_cancer_history sister_bc_cancer_history mom_oc_cancer_history m_aunt_oc_cancer_history p_aunt_oc_cancer_history m_grandmother_oc_cancer_history p_grantmother_oc_cancer_history sister_oc_cancer_history hrt_type hrt_duration hrt_years_ago_stopped",
         'use_second_order_risk_factor_features': False,
-        'callibrator_path': 'snapshot/callibrators/MIRAI_POST_NO_RF.callibrator.p'
+        'callibrator_path': 'snapshots/callibrators/MIRAI_FULL.callibrator.p'
     }
     ONCONET_ARGS = Args(ONCONET_CONFIG)
     ONCONET_ARGS = Args(ONCONET_CONFIG)

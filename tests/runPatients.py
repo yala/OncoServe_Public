@@ -12,7 +12,7 @@ DOMAIN = "http://localhost:5000"
 
 
 START_DIR = '/home/yala/CD_dicoms'
-PATIENTS = ['RichelleNessralla']#,'MiljaPoe' ,'ReginaCook','RichelleNessralla']
+PATIENTS = ['MiljaPoe' ,'ReginaCook','RichelleNessralla', 'EllenDavis']
 MRN = '1111111'
 ACCESSION = '1111111'
 METADATA = {'mrn':MRN, 'accession': ACCESSION}
