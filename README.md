@@ -36,7 +36,7 @@ The repositories perform the following functions:
 
 ### Streaming mode (One mammogram at a time):
 Once your webserver is setup, you can get model assessments by sending it HTTP requests.
-See `tests/demo.py` for a usage example in python or `tests/demo.js` for a usage example in javascript. The demo is organized as a python test case, and show cases how the system should behave given faulty inputs and correct inputs. Note, you'll need to update the paths in the setUp function in the demo to refer to real dicom paths (see comments in the file).
+See `tests/demo.py` for a usage example in python or `tests/demo.js` for a usage example in javascript. The python demo is organized as a python test case. Note, you'll need to update the paths in the setUp function in the demo to refer to real dicom paths (see comments in the file).
 
 ### Batch mode:
 See the [Mirai](https://github.com/yala/Mirai) github. This will require logging into the docker container with a shell and running our batch processing scripts.
