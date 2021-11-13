@@ -4,18 +4,15 @@ import sys
 sys.path.append(dirname(dirname(realpath(__file__))))
 sys.path.append(os.path.join(dirname(dirname(realpath(__file__))),'OncoNet'))
 sys.path.append(os.path.join(dirname(dirname(realpath(__file__))), 'OncoData'))
-sys.path.append(os.path.join(dirname(dirname(realpath(__file__))), 'OncoQueries'))
 import sys
 import oncoserve.logger
 from flask import Flask
 from flask import request, json, jsonify
 import oncoserve.onconet_wrapper as onconet_wrapper
 import oncoserve.oncodata_wrapper as oncodata_wrapper
-import oncoserve.oncoqueries_wrapper as oncoqueries_wrapper
 import pdb
 
 ONCODATA_SUCCESS_MSG = 'OncoData- Successfully converted dicoms into pngs through OncoData'
-ONCOQUERIES_SUCCESS_MSG = 'OncoQueries- Successfully obtained risk factors through OncoQueries'
 ONCONET_SUCCESS_MSG = 'OncoNet- Succesfully got prediction from OncoNet for exam'
 ONCOSERVE_FAIL_MSG = 'Error. Could not serve request. Exception: {}'
 HTTP_200_OK = 200
@@ -70,17 +67,7 @@ def serve():
         response['metadata'] = metadata
         images  = oncodata_wrapper.get_pngs(dicoms, oncodata_args, logger)
         logger.info(ONCODATA_SUCCESS_MSG)
-        if onconet_args.use_risk_factors and not onconet_args.use_pred_risk_factors_at_test:
-            assert 'mrn' in metadata
-            assert 'accession' in metadata
-            risk_factor_vector = oncoqueries_wrapper.get_risk_factors(onconet_args,
-                                            metadata['mrn'],
-                                            metadata['accession'],
-                                            oncodata_args.temp_img_dir,
-                                            logger)
-            logger.info(ONCOQUERIES_SUCCESS_MSG)
-        else:
-            risk_factor_vector = None
+        risk_factor_vector = None
         y = onconet.process_exam(images, risk_factor_vector)
         logger.info(ONCONET_SUCCESS_MSG)
         msg = 'OK'
