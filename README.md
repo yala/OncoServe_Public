@@ -18,7 +18,7 @@ The repositories perform the following functions:
 
 ## How to run it?
 ### Startup Steps:
-- First, download the correct docker image from the following links: [Mirai](https://www.dropbox.com/s/8nlyb5q8ppfh085/oncoserve_mirai.0.4.0.tar?dl=0), [Density](https://www.dropbox.com/s/vncq542aapjtvc8/oncoserve_density_0.1.0.tar?dl=0).
+- First, download the correct docker image from the following links: [Mirai](https://www.dropbox.com/s/k0wq2z7xqr95y3b/oncoserve_mirai.0.5.0.tar?dl=0), [Density](https://www.dropbox.com/s/vncq542aapjtvc8/oncoserve_density_0.1.0.tar?dl=0).
 
 - Pull load the docker image from dockerhub.
 ``` docker load < filename.tar```
@@ -30,7 +30,7 @@ The repositories perform the following functions:
 
 
 ### Running the Mirai Application:
-```docker run -p 5000:5000 --shm-size 32G learn2cure/oncoserve_mirai:0.4.0```
+```docker run -p 5000:5000 --shm-size 32G learn2cure/oncoserve_mirai:0.5.0```
 
 ## How to use it?
 
