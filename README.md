@@ -18,7 +18,7 @@ The repositories perform the following functions:
 
 ## How to run it?
 ### Startup Steps:
-- First, download the correct docker image from the following links: [Mirai](https://www.dropbox.com/s/k0wq2z7xqr95y3b/oncoserve_mirai.0.5.0.tar?dl=0), [Density](https://www.dropbox.com/s/vncq542aapjtvc8/oncoserve_density_0.1.0.tar?dl=0).
+- First, get the correct docker image from the research team. Due changes in legal guidance, this step now requires a collaboration agreement.
 
 - Pull load the docker image from dockerhub.
 ``` docker load < filename.tar```
